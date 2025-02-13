@@ -10,15 +10,19 @@ function Navigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="LoginStackNavigator" component={LoginStackNavigator} options={{
+        {/* <Stack.Screen name="LoginStackNavigator" component={LoginStackNavigator} options={{
           headerShown: false
-        }} />
-        <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} options={{
-          headerShown: false
-        }} />
+        }} /> */}
+        <Stack.Screen
+          name="DrawerNavigator"
+          component={DrawerNavigator}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
-  )
+  );
 }
 
 export default Navigator;

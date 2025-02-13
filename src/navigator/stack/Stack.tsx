@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { DrawerActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StackParamList, StackProps } from './Stack.typeDefs';
@@ -11,7 +11,7 @@ import Details from '@/src/views/Details';
 import Profile from '@/src/views/Profile';
 import Login from '@/src/views/Login';
 import ForgotPassword from '@/src/views/ForgotPassword';
-
+import Settings from '@/src/views/Settings';
 const Stack = createNativeStackNavigator<StackParamList>();
 
 const navigationProps = {
@@ -73,6 +73,23 @@ export function ProfileStackNavigator({ navigation }: StackProps) {
     </Stack.Navigator>
   );
 }
+export function SettingsStackNavigator({ navigation }: StackProps) {
+  const toggleDrawer = () => navigation.dispatch(DrawerActions.toggleDrawer());
+  return (
+    <Stack.Navigator screenOptions={navigationProps}>
+      <Stack.Screen
+        component={Settings}
+        name="SettingsStack"
+        options={{
+          title: 'Setting',
+          headerTitle: () => <StackHeaderTitle />,
+          headerLeft: () => <StackHeaderLeft onPress={toggleDrawer} />,
+          headerTitleAlign: 'center',
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
 
 export function LoginStackNavigator({ navigation }: StackProps) {
   return (
@@ -81,14 +98,14 @@ export function LoginStackNavigator({ navigation }: StackProps) {
         component={Login}
         name="LoginStack"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
       <Stack.Screen
         component={ForgotPassword}
         name="ForgotPasswordStack"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

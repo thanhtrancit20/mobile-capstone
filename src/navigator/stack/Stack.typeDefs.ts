@@ -8,9 +8,10 @@ export type StackParamList = {
   LoginStack: undefined;
   ForgotPasswordStack: { from: string };
 
+  SettingsStack: undefined;
 
   DrawerNavigator: undefined;
-  LoginStackNavigator: undefined
+  LoginStackNavigator: undefined;
 };
 
 export type StackProps = NativeStackScreenProps<StackParamList, keyof StackParamList>;
