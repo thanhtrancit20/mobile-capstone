@@ -1,12 +1,19 @@
 import { HStack } from '@/components/ui/hstack';
 import React from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
-import { AvatarFallbackText, AvatarImage } from '@/components/ui/avatar';
+import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { Avatar } from '@rneui/themed';
 import { Button, Icon, ListItem } from '@rneui/base';
-import { VStack } from '@/components/ui/vstack';
-import { BR } from '@expo/html-elements';
-const Settings = () => {
+import { StackProps } from '@/src/navigator/stack';
+
+const Settings = ({ navigation }: StackProps) => {
+
+  function handleEdit() {
+    navigation.navigate("EditProfileStack");
+  }
+
+  function handleLogOut() {
+    navigation.replace("LoginStackNavigator");
+  }
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="h-full w-full p-8 flex flex-col justify-between">
@@ -33,7 +40,7 @@ const Settings = () => {
             <View>
               <Text className="text-3xl font-semibold">Sabrina Aryan</Text>
               <Text className="text-gray-500 mb-3">SabrinaAry208@gmailcom</Text>
-              <Button size="sm" containerStyle={{ borderRadius: 7, width: 120 }}>
+              <Button onPress={handleEdit} size="sm" containerStyle={{ borderRadius: 7, width: 120 }}>
                 Edit Profile
               </Button>
             </View>
@@ -46,13 +53,15 @@ const Settings = () => {
               </ListItem.Content>
               <ListItem.Chevron color="black" size={23} />
             </ListItem>
-            <ListItem>
-              <Icon name="logout" type="antdesign" color="black" />
-              <ListItem.Content>
-                <ListItem.Title>Log out</ListItem.Title>
-              </ListItem.Content>
-              <ListItem.Chevron color="black" size={23} />
-            </ListItem>
+            <TouchableOpacity onPress={handleLogOut}>
+              <ListItem>
+                <Icon name="logout" type="antdesign" color="black" />
+                <ListItem.Content>
+                  <ListItem.Title>Log out</ListItem.Title>
+                </ListItem.Content>
+                <ListItem.Chevron color="black" size={23} />
+              </ListItem>
+            </TouchableOpacity>
           </View>
         </View>
         <View>

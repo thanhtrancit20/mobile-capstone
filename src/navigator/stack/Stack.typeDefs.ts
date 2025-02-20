@@ -9,7 +9,7 @@ export type StackParamList = {
   ForgotPasswordStack: { from: string };
 
   SettingsStack: undefined;
-
+  EditProfileStack: undefined;
   DrawerNavigator: undefined;
   LoginStackNavigator: undefined;
 };

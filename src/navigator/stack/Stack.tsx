@@ -12,6 +12,7 @@ import Profile from '@/src/views/Profile';
 import Login from '@/src/views/Login';
 import ForgotPassword from '@/src/views/ForgotPassword';
 import Settings from '@/src/views/Settings';
+import EditProfile from '@/src/views/EditProfile';
 const Stack = createNativeStackNavigator<StackParamList>();
 
 const navigationProps = {
@@ -82,6 +83,16 @@ export function SettingsStackNavigator({ navigation }: StackProps) {
         name="SettingsStack"
         options={{
           title: 'Setting',
+          headerTitle: () => <StackHeaderTitle />,
+          headerLeft: () => <StackHeaderLeft onPress={toggleDrawer} />,
+          headerTitleAlign: 'center',
+        }}
+      />
+      <Stack.Screen
+        component={EditProfile}
+        name="EditProfileStack"
+        options={{
+          title: 'Edit Profile',
           headerTitle: () => <StackHeaderTitle />,
           headerLeft: () => <StackHeaderLeft onPress={toggleDrawer} />,
           headerTitleAlign: 'center',
