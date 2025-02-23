@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { TouchableOpacity, View } from 'react-native';
@@ -6,48 +6,47 @@ import { useAuthStore } from '@/src/zustand/auth/useAuthStore';
 import { useLogin } from '@/src/queries/Auth/useLogin';
 import { Controller, useForm } from 'react-hook-form';
 import { initialLoginFormValue, loginFormSchema, LoginFormType } from './helpers';
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Heading } from "@/components/ui/heading"
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
 import { VStack } from '@/components/ui/vstack';
 import { EyeIcon, EyeOffIcon } from '@/components/ui/icon';
 import { Button, ButtonText } from '@/components/ui/button';
 import { HStack } from '@/components/ui/hstack';
-import { StackProps } from "@/src/navigator";
-import { SafeAreaView } from "react-native-safe-area-context";
-
+import { StackProps } from '@/src/navigator';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Login({ navigation }: StackProps) {
   const { setUser, setTokens } = useAuthStore();
-  const [showPassword, setShowPassword] = React.useState(false)
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const handleState = () => {
-    setShowPassword((showState) => {
-      return !showState
-    })
-  }
+    setShowPassword(showState => {
+      return !showState;
+    });
+  };
 
   const onNavigate = () => {
-    navigation.replace("DrawerNavigator");
-  }
+    navigation.replace('DrawerNavigator');
+  };
 
   const onForgotPassword = () => {
-    navigation.navigate("ForgotPasswordStack", { from: "Login" });
+    navigation.navigate('ForgotPasswordStack', { from: 'Login' });
   };
 
   const { onLogin } = useLogin({
-    onSuccess: (data) => {
+    onSuccess: data => {
       const { accessToken, refreshToken } = data.result;
-      console.log(data.result)
-      AsyncStorage.setItem("accessToken", accessToken).catch((error) => {
-        console.error("Failed to save access token:", error);
+      console.log(data.result);
+      AsyncStorage.setItem('accessToken', accessToken).catch(error => {
+        console.error('Failed to save access token:', error);
       });
       setTokens(accessToken, refreshToken);
       onNavigate();
     },
-    onError: (error) => {
-      console.error("Login failed:", error);
+    onError: error => {
+      console.error('Login failed:', error);
     },
   });
 
@@ -57,22 +56,24 @@ export default function Login({ navigation }: StackProps) {
     formState: { errors },
   } = useForm<LoginFormType>({
     defaultValues: initialLoginFormValue,
-    mode: "onChange",
+    mode: 'onChange',
     shouldFocusError: true,
-    reValidateMode: "onChange",
+    reValidateMode: 'onChange',
     resolver: zodResolver(loginFormSchema),
   });
 
   const onSubmit = (data: LoginFormType) => {
-    console.log("🚀 ~ onSubmit ~ data:", data);
+    console.log('🚀 ~ onSubmit ~ data:', data);
 
     onLogin(data);
   };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className='flex items-center h-full w-full my-40'>
-        <Heading className='color-blue-600' size='3xl'>Login</Heading>
+      <View className="flex items-center h-full w-full my-40">
+        <Heading className="color-blue-600" size="3xl">
+          Login
+        </Heading>
 
         <VStack space="md" className="px-8 my-4">
           <Text className="text-black font-semibold text-xl">Email</Text>
@@ -93,17 +94,22 @@ export default function Login({ navigation }: StackProps) {
           />
         </VStack>
 
-        <VStack space="md" className='px-8'>
+        <VStack space="md" className="px-8">
           <Text className="text-black font-semibold text-xl">Password</Text>
           <Controller
             control={control}
             name="password"
             render={({ field: { onChange, value } }) => (
-              <Input variant="outline" size="xl" isInvalid={!!errors.password} isDisabled={false} className="w-full">
+              <Input
+                variant="outline"
+                size="xl"
+                isInvalid={!!errors.password}
+                isDisabled={false}
+                className="w-full">
                 <InputField
                   value={value}
                   onChangeText={onChange}
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
                 />
                 <InputSlot className="pr-3" onPress={handleState}>
@@ -114,11 +120,17 @@ export default function Login({ navigation }: StackProps) {
           />
         </VStack>
 
-        <TouchableOpacity className='self-end px-8' onPress={onForgotPassword}>
-          <Heading className='color-blue-600' size='md'>Forgot Password?</Heading>
+        <TouchableOpacity className="self-end px-8" onPress={onForgotPassword}>
+          <Heading className="color-blue-600" size="md">
+            Forgot Password?
+          </Heading>
         </TouchableOpacity>
 
-        <Button size="xl" variant="solid" className='bg-blue-500 w-2/4 my-5' onPress={handleSubmit(onSubmit)}>
+        <Button
+          size="xl"
+          variant="solid"
+          className="bg-blue-500 w-2/4 my-5"
+          onPress={handleSubmit(onSubmit)}>
           <ButtonText>Login</ButtonText>
         </Button>
 

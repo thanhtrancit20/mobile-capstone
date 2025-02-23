@@ -1,11 +1,6 @@
 {
   "root": true,
   "extends": [
-    "universe",
-    "universe/shared/typescript-analysis",
-    "universe/native",
-    "universe/node",
-    "universe/web"
   ],
   "overrides": [
     {

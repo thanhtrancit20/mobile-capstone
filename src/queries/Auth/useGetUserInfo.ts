@@ -10,7 +10,7 @@ export function useGetUserInfo(
   },
 ) {
   const {
-    data,
+    data: userinfo,
     error,
     isError,
     isFetching,
@@ -19,9 +19,10 @@ export function useGetUserInfo(
     queryFn: () => {
       return responseWrapper<ApiResponseType<User>>(authApi.getUserInfo);
     },
-    select: (data) => data?.result || {},
+    select: data => data?.result,
     notifyOnChangeProps: ['data', 'isFetching'],
     enabled: options?.enabled,
+    staleTime: 0,
     keepPreviousData: true,
     ...options,
   });
@@ -30,7 +31,7 @@ export function useGetUserInfo(
   const handleInvalidateUserInfo = () => queryClient.invalidateQueries(API_QUERIES.IDENTITY);
 
   return {
-    data,
+    userinfo,
     error,
     isError,
     isFetching,

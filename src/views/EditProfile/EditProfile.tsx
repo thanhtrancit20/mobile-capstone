@@ -1,8 +1,9 @@
 import { FormControl, FormControlLabel, FormControlLabelText } from '@/components/ui/form-control';
-import { Input, InputField } from '@/components/ui/input';
+import { useUpdateTeacher } from '@/src/queries';
 import { useGetUserInfo } from '@/src/queries/Auth/useGetUserInfo';
+import { Role } from '@/src/zustand/auth/types';
 import { Icon, Text } from '@rneui/base';
-import { Avatar, Button } from '@rneui/themed';
+import { Avatar, Button, Input } from '@rneui/themed';
 import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StyleSheet, TouchableOpacity, View, Dimensions } from 'react-native';
@@ -11,9 +12,13 @@ import { ScrollView } from 'react-native-gesture-handler';
 const { width } = Dimensions.get('window');
 
 const EditProfile = () => {
-  const { data: userinfo, isFetching, onGetUserInfo } = useGetUserInfo();
+  const { userinfo, isFetching, onGetUserInfo } = useGetUserInfo({
+    enabled: true,
+  });
 
-  const { control, handleSubmit, setValue } = useForm({
+  const { onUpdateTeacher } = useUpdateTeacher();
+
+  const { control, handleSubmit, setValue, reset } = useForm<any>({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -24,25 +29,33 @@ const EditProfile = () => {
   });
 
   useEffect(() => {
-    if (userinfo) {
-      setValue('firstName', userinfo.firstName);
-      setValue('lastName', userinfo.lastName);
-      setValue('username', userinfo.username);
-      setValue('email', userinfo.email);
-      setValue('phoneNumber', userinfo.phoneNumber);
-    }
-  }, [userinfo, setValue]);
+    reset({
+      firstName: userinfo?.firstName,
+      lastName: userinfo?.lastName,
+      username: userinfo?.username,
+      email: userinfo?.email,
+      phoneNumber: userinfo?.phoneNumber,
+    });
+  }, [userinfo]);
 
-  const onSubmit = (formData) => {
-    console.log('Updated Data:', formData);
+  const onSubmit = formData => {
+    switch (userinfo.roles[0]) {
+      case Role.TEACHER:
+        return onUpdateTeacher({
+          id: userinfo?.id,
+          data: { ...(userinfo as any), phoneNumber: formData.phoneNumber },
+        });
+      default:
+        break;
+    }
   };
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
-      <View className='flex-1'>
-        <View className='absolute w-full h-full bg-blue-200'></View>
+      <View className="flex-1">
+        <View className="absolute w-full h-full bg-blue-200"></View>
 
-        <View className='relative flex-1 bg-white rounded-tl-3xl rounded-tr-3xl mt-32 py-5'>
+        <View className="relative flex-1 bg-white rounded-tl-3xl rounded-tr-3xl mt-32 py-5">
           <View style={styles.avatarContainer}>
             <Avatar
               rounded
@@ -51,24 +64,27 @@ const EditProfile = () => {
               containerStyle={styles.avatar}
             />
             <TouchableOpacity style={styles.editIcon}>
-              <Icon name='edit' type='material' color='#fff' size={20} />
+              <Icon name="edit" type="material" color="#fff" size={20} />
             </TouchableOpacity>
           </View>
 
           <View style={styles.scrollContainer}>
-            <Text className='text-3xl font-extrablack'>Edit Profile</Text>
-            <View className='w-11/12 px-3'>
+            <Text className="text-3xl font-extrablack">Edit Profile</Text>
+            <View className="w-11/12 px-3">
               <FormControl>
                 <FormControlLabel>
                   <FormControlLabelText>First Name</FormControlLabelText>
                 </FormControlLabel>
                 <Controller
                   control={control}
-                  name='firstName'
+                  name="firstName"
                   render={({ field: { onChange, value } }) => (
-                    <Input className='mb-3 rounded-2xl' size='lg'>
-                      <InputField type='text' placeholder='First name' value={value} onChangeText={onChange} />
-                    </Input>
+                    <Input
+                      placeholder="First name"
+                      value={value}
+                      onChangeText={onChange}
+                      disabled
+                    />
                   )}
                 />
 
@@ -77,11 +93,9 @@ const EditProfile = () => {
                 </FormControlLabel>
                 <Controller
                   control={control}
-                  name='lastName'
+                  name="lastName"
                   render={({ field: { onChange, value } }) => (
-                    <Input className='mb-3 rounded-2xl' size='lg'>
-                      <InputField type='text' placeholder='Last name' value={value} onChangeText={onChange} />
-                    </Input>
+                    <Input placeholder="Last name" value={value} onChangeText={onChange} disabled />
                   )}
                 />
 
@@ -90,11 +104,9 @@ const EditProfile = () => {
                 </FormControlLabel>
                 <Controller
                   control={control}
-                  name='username'
-                  render={({ field: { value } }) => (
-                    <Input className='mb-3 rounded-2xl bg-gray-300' size='lg' isReadOnly={true}>
-                      <InputField type='text' placeholder='Username' value={value} />
-                    </Input>
+                  name="username"
+                  render={({ field: { onChange, value } }) => (
+                    <Input placeholder="Username" value={value} onChangeText={onChange} disabled />
                   )}
                 />
 
@@ -103,11 +115,9 @@ const EditProfile = () => {
                 </FormControlLabel>
                 <Controller
                   control={control}
-                  name='email'
-                  render={({ field: { value } }) => (
-                    <Input className='mb-3 rounded-2xl bg-gray-300' size='lg' isReadOnly={true}>
-                      <InputField type='text' placeholder='Email' value={value} />
-                    </Input>
+                  name="email"
+                  render={({ field: { onChange, value } }) => (
+                    <Input placeholder="Email" value={value} onChangeText={onChange} disabled />
                   )}
                 />
 
@@ -116,16 +126,24 @@ const EditProfile = () => {
                 </FormControlLabel>
                 <Controller
                   control={control}
-                  name='phoneNumber'
+                  name="phoneNumber"
                   render={({ field: { onChange, value } }) => (
-                    <Input className='mb-3 rounded-2xl' size='lg'>
-                      <InputField type='text' placeholder='Phone number' value={value} onChangeText={onChange} />
-                    </Input>
+                    <Input
+                      keyboardType="numeric"
+                      placeholder="Phone number"
+                      value={value}
+                      onChangeText={text => onChange(text)}
+                      maxLength={10}
+                    />
                   )}
                 />
               </FormControl>
 
-              <Button title='Save Change' buttonStyle={styles.saveButton} onPress={handleSubmit(onSubmit)} />
+              <Button
+                title="Save Change"
+                buttonStyle={styles.saveButton}
+                onPress={handleSubmit(onSubmit)}
+              />
             </View>
           </View>
         </View>
@@ -166,4 +184,3 @@ const styles = StyleSheet.create({
 });
 
 export default EditProfile;
-
