@@ -7,28 +7,26 @@ import { StackProps } from '@/src/navigator/stack';
 import { useGetUserInfo } from '@/src/queries/Auth/useGetUserInfo';
 import SettingOption from '@/src/components/SettingOption/SettingOption';
 
-
 const Settings = ({ navigation }: StackProps) => {
-
   const settingOptions = [
     {
       id: 1,
       title: 'Student Information',
       handleOnPress: handleEdit,
-      iconProps: { color: 'blue', name: 'idcard', type: 'antdesign', size: 20 }
+      iconProps: { color: 'blue', name: 'idcard', type: 'antdesign', size: 20 },
     },
     {
       id: 2,
       title: 'Change Password',
       handleOnPress: handleChangePassword,
-      iconProps: { color: '#366899', name: 'lock', type: 'material-icons', size: 20 }
+      iconProps: { color: '#366899', name: 'lock', type: 'material-icons', size: 20 },
     },
     {
       id: 3,
       title: 'Log Out',
       handleOnPress: handleLogOut,
-      iconProps: { color: 'red', name: 'log-out', type: 'entypo', size: 20 }
-    }
+      iconProps: { color: 'red', name: 'log-out', type: 'entypo', size: 20 },
+    },
   ];
 
   const { userinfo, isFetching, onGetUserInfo } = useGetUserInfo({
@@ -36,20 +34,20 @@ const Settings = ({ navigation }: StackProps) => {
   });
 
   function handleEdit() {
-    navigation.navigate("EditProfileStack");
+    navigation.navigate('EditProfileStack');
   }
 
   function handleLogOut() {
-    navigation.replace("LoginStackNavigator");
+    navigation.replace('LoginStackNavigator');
   }
 
   function handleChangePassword() {
-    navigation.replace("LoginStackNavigator");
+    navigation.navigate('ChangePasswordStack');
   }
   return (
     <SafeAreaView className="flex-1 bg-[#f7f7fb]">
       <View className="h-full w-full flex flex-col">
-        <HStack space="lg" alignItems="center" className='bg-blue-500 px-5 pt-12 pb-5'>
+        <HStack space="lg" alignItems="center" className="bg-blue-500 px-5 pt-12 pb-5">
           <Avatar
             size={70}
             rounded
@@ -72,15 +70,13 @@ const Settings = ({ navigation }: StackProps) => {
             <Text className="text-2xl text-white font-semibold">
               {userinfo?.firstName} {userinfo?.lastName}
             </Text>
-            <Text className="text-white text-lg">
-              IRN: {userinfo?.studentId}
-            </Text>
+            <Text className="text-white text-lg">IRN: {userinfo?.studentId}</Text>
           </View>
         </HStack>
 
-        <View className='justify-between flex-1 mb-5'>
-          <View className='p-2'>
-            {settingOptions.map((option) => (
+        <View className="justify-between flex-1 mb-5">
+          <View className="p-2">
+            {settingOptions.map(option => (
               <SettingOption
                 key={option.id}
                 title={option.title}

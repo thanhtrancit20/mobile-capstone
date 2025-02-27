@@ -16,6 +16,7 @@ export type StackParamList = {
   TabNavigator: undefined;
   NewsStack: undefined;
   NewsDetailStack: { newsId: string };
+  ChangePasswordStack: undefined;
 };
 
 export type StackProps = NativeStackScreenProps<StackParamList, keyof StackParamList>;

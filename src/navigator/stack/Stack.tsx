@@ -15,6 +15,7 @@ import EditProfile from '@/src/views/EditProfile';
 import HomeFunctions from '@/src/views/HomeFunctions';
 import News from '@/src/views/News';
 import NewsDetail from '@/src/views/NewsDetail/NewsDetail';
+import ChangePasword from '@/src/views/ChangePassword';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -31,18 +32,18 @@ export function HomeStackNavigator({ navigation }: StackProps) {
         component={Home}
         name="HomeStack"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
       <Stack.Screen
         component={HomeFunctions}
         name="HomeFunctionsStack"
         options={{
-          title: "",
-          headerTitleAlign: "center",
+          title: '',
+          headerTitleAlign: 'center',
           headerTitle: () => <StackHeaderTitle title="All Functions" />,
           headerStyle: {
-            backgroundColor: '#3b82f6'
+            backgroundColor: '#3b82f6',
           },
         }}
       />
@@ -50,11 +51,11 @@ export function HomeStackNavigator({ navigation }: StackProps) {
         component={News}
         name="NewsStack"
         options={{
-          title: "",
-          headerTitleAlign: "center",
+          title: '',
+          headerTitleAlign: 'center',
           headerTitle: () => <StackHeaderTitle title="News" />,
           headerStyle: {
-            backgroundColor: '#3b82f6'
+            backgroundColor: '#3b82f6',
           },
         }}
       />
@@ -62,11 +63,11 @@ export function HomeStackNavigator({ navigation }: StackProps) {
         component={NewsDetail}
         name="NewsDetailStack"
         options={{
-          title: "",
-          headerTitleAlign: "center",
+          title: '',
+          headerTitleAlign: 'center',
           headerTitle: () => <StackHeaderTitle title="News Detail" />,
           headerStyle: {
-            backgroundColor: '#3b82f6'
+            backgroundColor: '#3b82f6',
           },
         }}
       />
@@ -85,7 +86,7 @@ export function ProfileStackNavigator({ navigation }: StackProps) {
           // headerTitle: () => <StackHeaderTitle />,
           headerTitleAlign: 'center',
           headerStyle: {
-            backgroundColor: '#3b82f6'
+            backgroundColor: '#3b82f6',
           },
         }}
       />
@@ -97,7 +98,7 @@ export function ProfileStackNavigator({ navigation }: StackProps) {
           // headerTitle: () => <StackHeaderTitle />,
           headerTitleAlign: 'center',
           headerStyle: {
-            backgroundColor: '#3b82f6'
+            backgroundColor: '#3b82f6',
           },
         }}
       />
@@ -111,9 +112,10 @@ export function SettingsStackNavigator({ navigation }: StackProps) {
         component={Settings}
         name="SettingsStack"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
+
       <Stack.Screen
         component={EditProfile}
         name="EditProfileStack"
@@ -122,7 +124,19 @@ export function SettingsStackNavigator({ navigation }: StackProps) {
           headerTitle: () => <StackHeaderTitle title="Student Information" />,
           headerTitleAlign: 'center',
           headerStyle: {
-            backgroundColor: '#3b82f6'
+            backgroundColor: '#3b82f6',
+          },
+        }}
+      />
+      <Stack.Screen
+        component={ChangePasword}
+        name="ChangePasswordStack"
+        options={{
+          title: '',
+          headerTitle: () => <StackHeaderTitle title="Student Information" />,
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#3b82f6',
           },
         }}
       />

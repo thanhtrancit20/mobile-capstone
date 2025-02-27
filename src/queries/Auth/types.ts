@@ -12,3 +12,9 @@ export interface LoginPayload {
 export interface RefreshTokenPayload {
   token: string;
 }
+
+export interface ChangePasswordPayload {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
