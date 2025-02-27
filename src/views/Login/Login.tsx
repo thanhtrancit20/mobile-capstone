@@ -28,7 +28,7 @@ export default function Login({ navigation }: StackProps) {
   };
 
   const onNavigate = () => {
-    navigation.replace('DrawerNavigator');
+    navigation.replace('TabNavigator');
   };
 
   const onForgotPassword = () => {

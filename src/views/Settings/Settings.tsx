@@ -4,8 +4,36 @@ import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { Avatar } from '@rneui/themed';
 import { Button, Icon, ListItem } from '@rneui/base';
 import { StackProps } from '@/src/navigator/stack';
+import { useGetUserInfo } from '@/src/queries/Auth/useGetUserInfo';
+import SettingOption from '@/src/components/SettingOption/SettingOption';
+
 
 const Settings = ({ navigation }: StackProps) => {
+
+  const settingOptions = [
+    {
+      id: 1,
+      title: 'Student Information',
+      handleOnPress: handleEdit,
+      iconProps: { color: 'blue', name: 'idcard', type: 'antdesign', size: 20 }
+    },
+    {
+      id: 2,
+      title: 'Change Password',
+      handleOnPress: handleChangePassword,
+      iconProps: { color: '#366899', name: 'lock', type: 'material-icons', size: 20 }
+    },
+    {
+      id: 3,
+      title: 'Log Out',
+      handleOnPress: handleLogOut,
+      iconProps: { color: 'red', name: 'log-out', type: 'entypo', size: 20 }
+    }
+  ];
+
+  const { userinfo, isFetching, onGetUserInfo } = useGetUserInfo({
+    enabled: true,
+  });
 
   function handleEdit() {
     navigation.navigate("EditProfileStack");
@@ -14,65 +42,63 @@ const Settings = ({ navigation }: StackProps) => {
   function handleLogOut() {
     navigation.replace("LoginStackNavigator");
   }
+
+  function handleChangePassword() {
+    navigation.replace("LoginStackNavigator");
+  }
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <View className="h-full w-full p-8 flex flex-col justify-between">
-        <View>
-          <HStack space="lg" alignItems="center">
-            <Avatar
-              size={80}
-              rounded
-              source={{ uri: 'https://randomuser.me/api/portraits/women/57.jpg' }}
-              // title="Bj"
-              containerStyle={{ backgroundColor: 'grey' }}>
-              <Avatar.Accessory
-                size={23}
-                style={{ backgroundColor: 'white' }}
-                containerStyle={{ backgroundColor: 'white', borderRadius: 50 }}
-                iconProps={{
-                  name: 'camerao',
-                  color: 'black',
-                  size: 15,
-                }}
-                type="antdesign"
-              />
-            </Avatar>
-            <View>
-              <Text className="text-3xl font-semibold">Sabrina Aryan</Text>
-              <Text className="text-gray-500 mb-3">SabrinaAry208@gmailcom</Text>
-              <Button onPress={handleEdit} size="sm" containerStyle={{ borderRadius: 7, width: 120 }}>
-                Edit Profile
-              </Button>
-            </View>
-          </HStack>
-          <View className="mt-12 -ml-4">
-            <ListItem>
-              <Icon name="infocirlceo" type="antdesign" color="black" />
-              <ListItem.Content>
-                <ListItem.Title>Information</ListItem.Title>
-              </ListItem.Content>
-              <ListItem.Chevron color="black" size={23} />
-            </ListItem>
-            <TouchableOpacity onPress={handleLogOut}>
-              <ListItem>
-                <Icon name="logout" type="antdesign" color="black" />
-                <ListItem.Content>
-                  <ListItem.Title>Log out</ListItem.Title>
-                </ListItem.Content>
-                <ListItem.Chevron color="black" size={23} />
-              </ListItem>
-            </TouchableOpacity>
+    <SafeAreaView className="flex-1 bg-[#f7f7fb]">
+      <View className="h-full w-full flex flex-col">
+        <HStack space="lg" alignItems="center" className='bg-blue-500 px-5 pt-12 pb-5'>
+          <Avatar
+            size={70}
+            rounded
+            source={{ uri: 'https://cdn-icons-png.flaticon.com/512/1154/1154987.png' }}
+            // title="Bj"
+            containerStyle={{ backgroundColor: 'grey' }}>
+            <Avatar.Accessory
+              size={23}
+              style={{ backgroundColor: 'white' }}
+              containerStyle={{ backgroundColor: 'white', borderRadius: 50 }}
+              iconProps={{
+                name: 'camerao',
+                color: 'black',
+                size: 15,
+              }}
+              type="antdesign"
+            />
+          </Avatar>
+          <View>
+            <Text className="text-2xl text-white font-semibold">
+              {userinfo?.firstName} {userinfo?.lastName}
+            </Text>
+            <Text className="text-white text-lg">
+              IRN: {userinfo?.studentId}
+            </Text>
           </View>
-        </View>
-        <View>
-          <View
-            className="mb-2"
-            style={{
-              borderBottomColor: 'black',
-              borderBottomWidth: 1,
-            }}
-          />
-          <Text className="text-center text-sm text-gray-500">App Version 2.3</Text>
+        </HStack>
+
+        <View className='justify-between flex-1 mb-5'>
+          <View className='p-2'>
+            {settingOptions.map((option) => (
+              <SettingOption
+                key={option.id}
+                title={option.title}
+                handleOnPress={option.handleOnPress}
+                iconProps={option.iconProps}
+              />
+            ))}
+          </View>
+          <View>
+            <View
+              className="mb-2"
+              style={{
+                borderBottomColor: 'black',
+                borderBottomWidth: 1,
+              }}
+            />
+            <Text className="text-center text-sm text-gray-500">App Version 2.3</Text>
+          </View>
         </View>
       </View>
     </SafeAreaView>

@@ -12,6 +12,10 @@ export type User = {
   avatar: string;
   roles?: Role;
   teacherId?: string;
+  studentId?: string;
+  present: string;
+  degreeLevel: string;
+  departmentId: string
 };
 export enum UserStatus {
   ACTIVE = 'ACTIVE',

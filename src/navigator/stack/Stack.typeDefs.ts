@@ -2,6 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type StackParamList = {
   HomeStack: undefined;
+  HomeFunctionsStack: undefined;
   DetailsStack: { from: string };
   ProfileStack: undefined;
   // add more screen props...
@@ -12,6 +13,9 @@ export type StackParamList = {
   EditProfileStack: undefined;
   DrawerNavigator: undefined;
   LoginStackNavigator: undefined;
+  TabNavigator: undefined;
+  NewsStack: undefined;
+  NewsDetailStack: { newsId: string };
 };
 
 export type StackProps = NativeStackScreenProps<StackParamList, keyof StackParamList>;

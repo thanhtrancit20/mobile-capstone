@@ -1,5 +1,4 @@
 import React, { lazy } from 'react';
-import { DrawerActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StackParamList, StackProps } from './Stack.typeDefs';
 import { StackHeaderLeft, StackHeaderTitle } from './components';
@@ -13,6 +12,10 @@ import Login from '@/src/views/Login';
 import ForgotPassword from '@/src/views/ForgotPassword';
 import Settings from '@/src/views/Settings';
 import EditProfile from '@/src/views/EditProfile';
+import HomeFunctions from '@/src/views/HomeFunctions';
+import News from '@/src/views/News';
+import NewsDetail from '@/src/views/NewsDetail/NewsDetail';
+
 const Stack = createNativeStackNavigator<StackParamList>();
 
 const navigationProps = {
@@ -22,26 +25,49 @@ const navigationProps = {
 };
 
 export function HomeStackNavigator({ navigation }: StackProps) {
-  const toggleDrawer = () => navigation.dispatch(DrawerActions.toggleDrawer());
   return (
     <Stack.Navigator screenOptions={navigationProps}>
       <Stack.Screen
         component={Home}
         name="HomeStack"
         options={{
-          title: 'Home',
-          headerTitle: () => <StackHeaderTitle />,
-          headerLeft: () => <StackHeaderLeft onPress={toggleDrawer} />,
-          headerTitleAlign: 'center',
+          headerShown: false
         }}
       />
       <Stack.Screen
-        component={Details}
-        name="DetailsStack"
+        component={HomeFunctions}
+        name="HomeFunctionsStack"
         options={{
-          title: 'Details',
-          headerTitle: () => <StackHeaderTitle />,
-          headerTitleAlign: 'center',
+          title: "",
+          headerTitleAlign: "center",
+          headerTitle: () => <StackHeaderTitle title="All Functions" />,
+          headerStyle: {
+            backgroundColor: '#3b82f6'
+          },
+        }}
+      />
+      <Stack.Screen
+        component={News}
+        name="NewsStack"
+        options={{
+          title: "",
+          headerTitleAlign: "center",
+          headerTitle: () => <StackHeaderTitle title="News" />,
+          headerStyle: {
+            backgroundColor: '#3b82f6'
+          },
+        }}
+      />
+      <Stack.Screen
+        component={NewsDetail}
+        name="NewsDetailStack"
+        options={{
+          title: "",
+          headerTitleAlign: "center",
+          headerTitle: () => <StackHeaderTitle title="News Detail" />,
+          headerStyle: {
+            backgroundColor: '#3b82f6'
+          },
         }}
       />
     </Stack.Navigator>
@@ -49,7 +75,6 @@ export function HomeStackNavigator({ navigation }: StackProps) {
 }
 
 export function ProfileStackNavigator({ navigation }: StackProps) {
-  const toggleDrawer = () => navigation.dispatch(DrawerActions.toggleDrawer());
   return (
     <Stack.Navigator screenOptions={navigationProps}>
       <Stack.Screen
@@ -57,45 +82,48 @@ export function ProfileStackNavigator({ navigation }: StackProps) {
         name="ProfileStack"
         options={{
           title: 'Profile',
-          headerTitle: () => <StackHeaderTitle />,
-          headerLeft: () => <StackHeaderLeft onPress={toggleDrawer} />,
+          // headerTitle: () => <StackHeaderTitle />,
           headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#3b82f6'
+          },
         }}
       />
       <Stack.Screen
         component={Details}
         name="DetailsStack"
         options={{
-          title: 'Details',
-          headerTitle: () => <StackHeaderTitle />,
+          title: 'Details Stack',
+          // headerTitle: () => <StackHeaderTitle />,
           headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#3b82f6'
+          },
         }}
       />
     </Stack.Navigator>
   );
 }
 export function SettingsStackNavigator({ navigation }: StackProps) {
-  const toggleDrawer = () => navigation.dispatch(DrawerActions.toggleDrawer());
   return (
     <Stack.Navigator screenOptions={navigationProps}>
       <Stack.Screen
         component={Settings}
         name="SettingsStack"
         options={{
-          title: 'Setting',
-          headerTitle: () => <StackHeaderTitle />,
-          headerLeft: () => <StackHeaderLeft onPress={toggleDrawer} />,
-          headerTitleAlign: 'center',
+          headerShown: false
         }}
       />
       <Stack.Screen
         component={EditProfile}
         name="EditProfileStack"
         options={{
-          title: 'Edit Profile',
-          headerTitle: () => <StackHeaderTitle />,
-          headerLeft: () => <StackHeaderLeft onPress={toggleDrawer} />,
+          title: '',
+          headerTitle: () => <StackHeaderTitle title="Student Information" />,
           headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#3b82f6'
+          },
         }}
       />
     </Stack.Navigator>

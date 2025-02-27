@@ -26,7 +26,7 @@ export default function TabNavigator() {
         headerShown: false,
         tabBarInactiveTintColor: colors.gray,
         tabBarInactiveBackgroundColor: colors.white,
-        tabBarActiveTintColor: colors.lightPurple,
+        tabBarActiveTintColor: colors.blue,
         tabBarActiveBackgroundColor: colors.white,
       })}>
       <Tab.Screen name="HomeTab" component={HomeStackNavigator} options={{ title: 'Home' }} />

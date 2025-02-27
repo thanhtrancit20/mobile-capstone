@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, StatusBar } from 'react-native';
+import { Text, View, StyleSheet, StatusBar, SafeAreaView } from 'react-native';
 import Button from '@/src/components/Button';
 import { StackProps } from '@/src/navigator/stack';
 import { colors } from '@/src/theme';
@@ -33,8 +33,7 @@ const styles = StyleSheet.create({
 
 export default function Profile({ navigation }: StackProps) {
   return (
-    <View style={styles.root}>
-      <StatusBar barStyle="light-content" />
+    <SafeAreaView className="flex-1 bg-[#f7f7fb]">
       <Text style={styles.title}>Profile</Text>
       <Button
         title="Go to Details"
@@ -44,6 +43,6 @@ export default function Profile({ navigation }: StackProps) {
           navigation.navigate('DetailsStack', { from: 'Profile' });
         }}
       />
-    </View>
+    </SafeAreaView>
   );
 }

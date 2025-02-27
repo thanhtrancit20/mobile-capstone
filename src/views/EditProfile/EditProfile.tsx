@@ -1,66 +1,38 @@
-import { FormControl, FormControlLabel, FormControlLabelText } from '@/components/ui/form-control';
-import { useUpdateTeacher } from '@/src/queries';
 import { useGetUserInfo } from '@/src/queries/Auth/useGetUserInfo';
-import { Role } from '@/src/zustand/auth/types';
 import { Icon, Text } from '@rneui/base';
-import { Avatar, Button, Input } from '@rneui/themed';
-import React, { useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Avatar } from '@rneui/themed';
+import React from 'react';
 import { StyleSheet, TouchableOpacity, View, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { Heading } from "@/components/ui/heading"
+import { VStack } from '@/components/ui/vstack';
+import UserInfoField from '@/src/components/UserInfoField/UserInfoField';
 
 const { width } = Dimensions.get('window');
+
+const departmentMap: Record<number, string> = {
+  1: "Computing and Information Technology",
+  2: "Nursing",
+  3: "Business",
+  4: "Engineering",
+};
 
 const EditProfile = () => {
   const { userinfo, isFetching, onGetUserInfo } = useGetUserInfo({
     enabled: true,
   });
 
-  const { onUpdateTeacher } = useUpdateTeacher();
-
-  const { control, handleSubmit, setValue, reset } = useForm<any>({
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      username: '',
-      email: '',
-      phoneNumber: '',
-    },
-  });
-
-  useEffect(() => {
-    reset({
-      firstName: userinfo?.firstName,
-      lastName: userinfo?.lastName,
-      username: userinfo?.username,
-      email: userinfo?.email,
-      phoneNumber: userinfo?.phoneNumber,
-    });
-  }, [userinfo]);
-
-  const onSubmit = formData => {
-    switch (userinfo.roles[0]) {
-      case Role.TEACHER:
-        return onUpdateTeacher({
-          id: userinfo?.id,
-          data: { ...(userinfo as any), phoneNumber: formData.phoneNumber },
-        });
-      default:
-        break;
-    }
-  };
-
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
       <View className="flex-1">
-        <View className="absolute w-full h-full bg-blue-200"></View>
+        <View className="absolute w-full h-full bg-blue-500"></View>
 
-        <View className="relative flex-1 bg-white rounded-tl-3xl rounded-tr-3xl mt-32 py-5">
+        <View className="relative flex-1 bg-[#f7f7fb] rounded-tl-3xl rounded-tr-3xl mt-32 py-5">
           <View style={styles.avatarContainer}>
             <Avatar
               rounded
               size={120}
-              source={{ uri: 'https://randomuser.me/api/portraits/women/57.jpg' }}
+              source={{ uri: 'https://cdn-icons-png.flaticon.com/512/1154/1154987.png' }}
               containerStyle={styles.avatar}
             />
             <TouchableOpacity style={styles.editIcon}>
@@ -69,86 +41,26 @@ const EditProfile = () => {
           </View>
 
           <View style={styles.scrollContainer}>
-            <Text className="text-3xl font-extrablack">Edit Profile</Text>
             <View className="w-11/12 px-3">
-              <FormControl>
-                <FormControlLabel>
-                  <FormControlLabelText>First Name</FormControlLabelText>
-                </FormControlLabel>
-                <Controller
-                  control={control}
-                  name="firstName"
-                  render={({ field: { onChange, value } }) => (
-                    <Input
-                      placeholder="First name"
-                      value={value}
-                      onChangeText={onChange}
-                      disabled
-                    />
-                  )}
-                />
 
-                <FormControlLabel>
-                  <FormControlLabelText>Last Name</FormControlLabelText>
-                </FormControlLabel>
-                <Controller
-                  control={control}
-                  name="lastName"
-                  render={({ field: { onChange, value } }) => (
-                    <Input placeholder="Last name" value={value} onChangeText={onChange} disabled />
-                  )}
-                />
+              <VStack className='items-center mb-5'>
+                <Heading>{userinfo?.firstName} {userinfo?.lastName}</Heading>
+                <Text className='text-lg'>IRN: {userinfo?.studentId}</Text>
+              </VStack>
 
-                <FormControlLabel>
-                  <FormControlLabelText>Username</FormControlLabelText>
-                </FormControlLabel>
-                <Controller
-                  control={control}
-                  name="username"
-                  render={({ field: { onChange, value } }) => (
-                    <Input placeholder="Username" value={value} onChangeText={onChange} disabled />
-                  )}
-                />
+              <UserInfoField infoField="Status" infoValue={userinfo?.present} />
+              <UserInfoField infoField="Gender" infoValue={userinfo?.gender} />
+              <UserInfoField infoField="Date of Birth" infoValue={userinfo?.dateOfBirth.toString()} />
+              <UserInfoField infoField="Degree Level" infoValue={userinfo?.degreeLevel} />
+              <UserInfoField infoField="Department" infoValue={departmentMap[userinfo?.departmentId]} />
+              <UserInfoField infoField="Address" infoValue={userinfo?.address} />
+              <UserInfoField infoField="Phone Number" infoValue={userinfo?.phoneNumber} />
 
-                <FormControlLabel>
-                  <FormControlLabelText>Email</FormControlLabelText>
-                </FormControlLabel>
-                <Controller
-                  control={control}
-                  name="email"
-                  render={({ field: { onChange, value } }) => (
-                    <Input placeholder="Email" value={value} onChangeText={onChange} disabled />
-                  )}
-                />
-
-                <FormControlLabel>
-                  <FormControlLabelText>Phone Number</FormControlLabelText>
-                </FormControlLabel>
-                <Controller
-                  control={control}
-                  name="phoneNumber"
-                  render={({ field: { onChange, value } }) => (
-                    <Input
-                      keyboardType="numeric"
-                      placeholder="Phone number"
-                      value={value}
-                      onChangeText={text => onChange(text)}
-                      maxLength={10}
-                    />
-                  )}
-                />
-              </FormControl>
-
-              <Button
-                title="Save Change"
-                buttonStyle={styles.saveButton}
-                onPress={handleSubmit(onSubmit)}
-              />
             </View>
           </View>
         </View>
       </View>
-    </ScrollView>
+    </ScrollView >
   );
 };
 
