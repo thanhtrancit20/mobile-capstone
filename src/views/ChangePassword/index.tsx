@@ -10,6 +10,7 @@ import { View } from 'react-native';
 import { ChangePasswordPayload } from '@/src/queries';
 import { useChangePassword } from '@/src/queries/Auth';
 import { Button, ButtonText } from '@/components/ui/button';
+
 const ChangePasword = ({ navigation }: StackProps) => {
   const { onChangePassword } = useChangePassword({
     onSuccess: data => {
@@ -17,6 +18,7 @@ const ChangePasword = ({ navigation }: StackProps) => {
       navigation.replace('LoginStackNavigator');
     },
   });
+
   const { control, handleSubmit } = useForm<ChangePasswordPayload>({
     defaultValues: {
       oldPassword: '',
@@ -27,16 +29,14 @@ const ChangePasword = ({ navigation }: StackProps) => {
     shouldFocusError: true,
     reValidateMode: 'onChange',
   });
+
   const onSubmit = (data: ChangePasswordPayload) => {
     onChangePassword(data);
   };
 
   return (
     <SafeAreaView>
-      <View className="flex items-center h-full w-full my-40">
-        <Heading className="color-blue-600" size="3xl">
-          Change Password
-        </Heading>
+      <View className="flex items-center bg-[#f7f7fb]">
         <VStack space="md" className="px-8">
           <Text className="text-black font-semibold text-xl">Old Password</Text>
           <Controller

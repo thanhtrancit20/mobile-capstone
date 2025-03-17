@@ -15,7 +15,7 @@ import { Pressable } from "@/components/ui/pressable";
 export default function ForgotPassword({ navigation }: StackProps) {
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-[#f7f7fb]">
       <View className='flex flex-1 my-40 px-8' >
 
         <Pressable onPress={() => navigation.goBack()}>

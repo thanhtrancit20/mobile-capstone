@@ -4,12 +4,12 @@ import { StackProps } from '@/src/navigator/stack';
 import { Avatar, Icon } from '@rneui/base';
 import { useGetUserInfo } from '@/src/queries/Auth/useGetUserInfo';
 import { Heading } from '@/components/ui/heading';
-import IconFunction from '@/src/components/IconFunction/IconFunction';
 import { iconFunctions } from '@/src/components/IconFunction/iconFunctions';
 import { HStack } from '@/components/ui/hstack';
-import { ScheduleComponent } from '../ScheduleComponent/ScheduleComponent';
+import { ScheduleComponent } from '../../components/ScheduleComponent/ScheduleComponent';
 import { useGetAllBlogs } from '@/src/queries/Blogs';
 import { formatDate } from '@/src/utils';
+import HomeIcon from '@/src/components/HomeIcon/HomeIcon';
 
 export default function Home({ navigation }: StackProps) {
 
@@ -56,14 +56,20 @@ export default function Home({ navigation }: StackProps) {
         <View className='w-full'>
           <Heading className='text-2xl p-5'>Function</Heading>
           <View className="flex-row flex-wrap justify-start">
-            {iconFunctions.slice(0, 8).map((item) => (
-              <IconFunction
+            {iconFunctions.slice(0, 7).map((item) => (
+              <HomeIcon
                 key={item.id}
                 title={item.title}
                 iconProps={item.iconProps}
-                onPress={item.title === "More" ? handleMorePress : undefined}
+                screenName={item.screenName}
               />
             ))}
+            <HomeIcon
+              key="more"
+              title="More"
+              iconProps={{ name: "ellipsis1", type: "antdesign", color: "gray" }}
+              screenName="HomeFunctionsStack"
+            />
           </View>
         </View>
 
@@ -83,7 +89,7 @@ export default function Home({ navigation }: StackProps) {
           contentContainerStyle={{ paddingHorizontal: 10 }}
           renderItem={({ item }) => (
             <TouchableOpacity className="bg-white rounded-lg mx-2 w-60 shadow-md" onPress={() => handleNewsDetailPress(item.id.toString())}>
-              <Image source={{ uri: 'https://eiu.edu.vn/wp-content/uploads/2025/02/EIU1403-34-2048x1365.jpg' }} className="w-full h-40 rounded-lg" resizeMode="cover" />
+              <Image source={{ uri: `http://10.0.2.2:8085${item.thumbnailUrl}` }} className="w-full h-40 rounded-lg" resizeMode="cover" />
               <Text className="text-base font-semibold mt-2 px-1.5" numberOfLines={2}>{item.title}</Text>
               <Text className="text-base p-1.5">{formatDate(item.createdDate)}</Text>
             </TouchableOpacity>

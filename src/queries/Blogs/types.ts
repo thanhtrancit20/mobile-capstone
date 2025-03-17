@@ -14,7 +14,8 @@ export interface BlogsResponse {
   tags: TagsResponse[];
   allowComments: boolean;
   hotScore: number;
-  isMobile: boolean
+  isMobile: boolean;
+  thumbnailUrl: string;
 }
 
 export interface BlogsPayload {

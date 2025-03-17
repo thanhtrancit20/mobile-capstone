@@ -10,14 +10,17 @@ type Props = {
 
 const IconFunction = ({ title, iconProps, onPress }: Props) => {
     return (
-        <TouchableOpacity className="w-1/4 p-2 items-center" onPress={onPress}>
-            < Icon
+        <TouchableOpacity
+            className="w-1/3 p-2 items-center justify-center border border-gray-200"
+            onPress={onPress}
+        >
+            <Icon
                 {...iconProps}
                 size={30}
-                className='bg-white p-4 rounded-full'
+                className='bg-white rounded-full'
             />
             <Text className="text-black text-lg mt-2 text-center font-medium">{title}</Text>
-        </TouchableOpacity >
+        </TouchableOpacity>
     )
 }
 

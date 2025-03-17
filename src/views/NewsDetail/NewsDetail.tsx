@@ -15,11 +15,11 @@ export default function NewsDetail({ route }: { route: NewsDetailRouteProp }) {
   const { width } = useWindowDimensions();
 
   return (
-    <ScrollView className="bg-white flex-1">
+    <ScrollView className="bg-[#f7f7fb] flex-1">
       <Image
-        source={{ uri: 'https://eiu.edu.vn/wp-content/uploads/2025/02/EIU1403-34-2048x1365.jpg' }}
+        source={{ uri: `http://10.0.2.2:8085${blog?.thumbnailUrl}` }}
         className="w-full h-56"
-        resizeMode="cover"
+        resizeMode="stretch"
       />
       <View className='p-3'>
         <Heading className='text-md'>{blog?.title}</Heading>

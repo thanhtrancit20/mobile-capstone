@@ -1,7 +1,5 @@
-import React from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import { TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import { useAuthStore } from '@/src/zustand/auth/useAuthStore';
 import { useLogin } from '@/src/queries/Auth/useLogin';
 import { Controller, useForm } from 'react-hook-form';
@@ -19,12 +17,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Login({ navigation }: StackProps) {
   const { setUser, setTokens } = useAuthStore();
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleState = () => {
-    setShowPassword(showState => {
-      return !showState;
-    });
+    setShowPassword(showState => !showState);
   };
 
   const onNavigate = () => {
@@ -38,14 +35,12 @@ export default function Login({ navigation }: StackProps) {
   const { onLogin } = useLogin({
     onSuccess: data => {
       const { accessToken, refreshToken } = data.result;
-      console.log(data.result);
-      AsyncStorage.setItem('accessToken', accessToken).catch(error => {
-        console.error('Failed to save access token:', error);
-      });
+      setLoading(false);
       setTokens(accessToken, refreshToken);
       onNavigate();
     },
     onError: error => {
+      setLoading(false);
       console.error('Login failed:', error);
     },
   });
@@ -63,21 +58,19 @@ export default function Login({ navigation }: StackProps) {
   });
 
   const onSubmit = (data: LoginFormType) => {
-    console.log('🚀 ~ onSubmit ~ data:', data);
-
+    setLoading(true);
     onLogin(data);
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-[#f7f7fb]">
       <View className="flex items-center h-full w-full my-40">
         <Heading className="color-blue-600" size="3xl">
           Login
         </Heading>
 
         <VStack space="md" className="px-8 my-4">
-          <Text className="text-black font-semibold text-xl">Email</Text>
-
+          <Text className="text-black font-semibold text-xl">Username</Text>
           <Controller
             control={control}
             name="username"
@@ -100,12 +93,7 @@ export default function Login({ navigation }: StackProps) {
             control={control}
             name="password"
             render={({ field: { onChange, value } }) => (
-              <Input
-                variant="outline"
-                size="xl"
-                isInvalid={!!errors.password}
-                isDisabled={false}
-                className="w-full">
+              <Input variant="outline" size="xl" isInvalid={!!errors.password} className="w-full">
                 <InputField
                   value={value}
                   onChangeText={onChange}
@@ -130,8 +118,10 @@ export default function Login({ navigation }: StackProps) {
           size="xl"
           variant="solid"
           className="bg-blue-500 w-2/4 my-5"
-          onPress={handleSubmit(onSubmit)}>
-          <ButtonText>Login</ButtonText>
+          onPress={handleSubmit(onSubmit)}
+          isDisabled={loading}
+        >
+          {loading ? <ActivityIndicator color="white" /> : <ButtonText>Login</ButtonText>}
         </Button>
 
         <Text className="text-black">By logging into an account you are agreeing with our</Text>

@@ -20,7 +20,7 @@ export default function News({ navigation }: StackProps) {
   };
 
   return (
-    <ScrollView className="bg-gray-100 flex-1 p-5">
+    <ScrollView className="flex-1 p-5 bg-[#f7f7fb]">
       <TouchableOpacity onPress={() => onGetAllBlogs()} className="bg-blue-500 p-3 rounded-lg mb-4">
         <Text className="text-white text-center font-bold">Tải lại</Text>
       </TouchableOpacity>
@@ -30,11 +30,11 @@ export default function News({ navigation }: StackProps) {
       {latestNews && (
         <TouchableOpacity className="mb-5" onPress={() => handleNewsDetailPress(latestNews.id.toString())}>
           <Image
-            source={{ uri: 'https://eiu.edu.vn/wp-content/uploads/2025/02/EIU1403-34-2048x1365.jpg' }}
+            source={{ uri: `http://10.0.2.2:8085${latestNews.thumbnailUrl}` }}
             className="w-full h-56 rounded-lg"
             resizeMode="cover"
           />
-          <Text className="text-lg font-bold mt-3" numberOfLines={1}>{latestNews.title}</Text>
+          <Text className="text-lg font-bold mt-3" numberOfLines={2}>{latestNews.title}</Text>
           <Text className="text-base mt-3">{formatDate(latestNews.createdDate)}</Text>
         </TouchableOpacity>
       )}
@@ -47,7 +47,7 @@ export default function News({ navigation }: StackProps) {
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => handleNewsDetailPress(item.id.toString())} className="flex-row bg-white mb-3 rounded-lg shadow-md">
             <Image
-              source={{ uri: 'https://eiu.edu.vn/wp-content/uploads/2025/02/EIU1403-34-2048x1365.jpg' }}
+              source={{ uri: `http://10.0.2.2:8085${item.thumbnailUrl}` }}
               className="w-24 h-24 rounded-lg"
               resizeMode="cover"
             />

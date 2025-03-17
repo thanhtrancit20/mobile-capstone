@@ -7,21 +7,20 @@ import { StackProps } from '@/src/navigator'
 
 const HomeFunctions = ({ navigation }: StackProps) => {
 
-    const handleMorePress = () => {
-        // navigation.navigate("HomeFunctionsStack");
+    const handlePress = () => {
         console.log("Pressed")
     };
 
     return (
         <SafeAreaView className="flex-1 bg-[#f7f7fb]">
-            <View className="h-full w-full flex flex-col items-center">
+            <View className="h-full w-full flex flex-col items-center mt-3">
                 <View className="flex-row flex-wrap justify-start">
-                    {iconFunctions.filter(item => item.title !== "More").map((item) => (
+                    {iconFunctions.map((item) => (
                         <IconFunction
                             key={item.id}
                             title={item.title}
                             iconProps={item.iconProps}
-                            onPress={handleMorePress} />
+                            onPress={handlePress} />
                     ))}
                 </View>
             </View>

@@ -16,6 +16,7 @@ import HomeFunctions from '@/src/views/HomeFunctions';
 import News from '@/src/views/News';
 import NewsDetail from '@/src/views/NewsDetail/NewsDetail';
 import ChangePasword from '@/src/views/ChangePassword';
+import CourseRegistration from '@/src/views/CourseRegistration';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -66,6 +67,18 @@ export function HomeStackNavigator({ navigation }: StackProps) {
           title: '',
           headerTitleAlign: 'center',
           headerTitle: () => <StackHeaderTitle title="News Detail" />,
+          headerStyle: {
+            backgroundColor: '#3b82f6',
+          },
+        }}
+      />
+      <Stack.Screen
+        component={CourseRegistration}
+        name="CourseRegistration"
+        options={{
+          title: '',
+          headerTitleAlign: 'center',
+          headerTitle: () => <StackHeaderTitle title="Course Registration" />,
           headerStyle: {
             backgroundColor: '#3b82f6',
           },
@@ -133,7 +146,7 @@ export function SettingsStackNavigator({ navigation }: StackProps) {
         name="ChangePasswordStack"
         options={{
           title: '',
-          headerTitle: () => <StackHeaderTitle title="Student Information" />,
+          headerTitle: () => <StackHeaderTitle title="Change Password" />,
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: '#3b82f6',

@@ -17,6 +17,8 @@ export type StackParamList = {
   NewsStack: undefined;
   NewsDetailStack: { newsId: string };
   ChangePasswordStack: undefined;
+  ScheduleScreenStack: undefined;
+  CourseRegistration: undefined;
 };
 
 export type StackProps = NativeStackScreenProps<StackParamList, keyof StackParamList>;
