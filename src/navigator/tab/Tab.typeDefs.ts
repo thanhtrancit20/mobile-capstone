@@ -8,7 +8,7 @@ export type TabBarStatus = {
 
 export type TabParamList = {
   HomeTab: undefined;
-  ProfileTab: undefined;
+  ChatTab: undefined;
   SettingsTab: undefined;
   // add more tab params...
 };

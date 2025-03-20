@@ -16,6 +16,7 @@ export type User = {
   present: string;
   degreeLevel: string;
   departmentId: string
+  fullname: string;
 };
 export enum UserStatus {
   ACTIVE = 'ACTIVE',
@@ -32,4 +33,9 @@ export enum Role {
   STUDENT = 'STUDENT',
   ADMIN = 'ADMIN',
   TEACHER = 'TEACHER',
+}
+
+export enum ONLINE_STATUS {
+  ONLINE = 'ONLINE',
+  OFFLINE = 'OFFLINE',
 }

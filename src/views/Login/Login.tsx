@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { TouchableOpacity, View, ActivityIndicator, Pressable } from 'react-native';
 import { useAuthStore } from '@/src/zustand/auth/useAuthStore';
 import { useLogin } from '@/src/queries/Auth/useLogin';
 import { Controller, useForm } from 'react-hook-form';
@@ -14,9 +14,11 @@ import { Button, ButtonText } from '@/components/ui/button';
 import { HStack } from '@/components/ui/hstack';
 import { StackProps } from '@/src/navigator';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useGetUserInfo } from '@/src/queries/Auth/useGetUserInfo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({ navigation }: StackProps) {
-  const { setUser, setTokens } = useAuthStore();
+  const { setUser, setTokens, clearAuth } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -32,18 +34,44 @@ export default function Login({ navigation }: StackProps) {
     navigation.navigate('ForgotPasswordStack', { from: 'Login' });
   };
 
-  const { onLogin } = useLogin({
-    onSuccess: data => {
-      const { accessToken, refreshToken } = data.result;
-      setLoading(false);
-      setTokens(accessToken, refreshToken);
+  const onPrivacy = () => {
+    navigation.navigate('Privacy');
+  };
+
+  const onTerms = () => {
+    navigation.navigate('Terms');
+  };
+
+  const { onGetUserInfo } = useGetUserInfo({
+    enabled: false,
+    onSuccess: (data) => {
+      setUser(data);
+      setLoading(false)
       onNavigate();
     },
-    onError: error => {
-      setLoading(false);
-      console.error('Login failed:', error);
+    onError: (error) => {
+      console.log(error)
     },
   });
+
+  const { onLogin } = useLogin({
+    onSuccess: (data) => {
+      const { accessToken, refreshToken } = data.result;
+      AsyncStorage.setItem('accessToken', accessToken);
+      setTokens(accessToken, refreshToken);
+      if (accessToken) {
+        onGetUserInfo();
+      }
+    },
+    onError: (error) => {
+      console.log(error)
+    },
+  });
+  const onSubmit = async (data: LoginFormType) => {
+    setLoading(true)
+    onLogin(data);
+  };
+
 
   const {
     control,
@@ -57,10 +85,6 @@ export default function Login({ navigation }: StackProps) {
     resolver: zodResolver(loginFormSchema),
   });
 
-  const onSubmit = (data: LoginFormType) => {
-    setLoading(true);
-    onLogin(data);
-  };
 
   return (
     <SafeAreaView className="flex-1 bg-[#f7f7fb]">
@@ -126,9 +150,9 @@ export default function Login({ navigation }: StackProps) {
 
         <Text className="text-black">By logging into an account you are agreeing with our</Text>
         <HStack space="xs">
-          <Text className="text-blue-600 font-bold">Terms and Conditions</Text>
+          <TouchableOpacity onPress={onTerms}><Text className="text-blue-600 font-bold">Terms and Conditions</Text></TouchableOpacity>
           <Text className="text-black">and</Text>
-          <Text className="text-blue-600 font-bold">Privacy Statement</Text>
+          <TouchableOpacity onPress={onPrivacy}><Text className="text-blue-600 font-bold">Privacy Statement</Text></TouchableOpacity>
         </HStack>
       </View>
     </SafeAreaView>

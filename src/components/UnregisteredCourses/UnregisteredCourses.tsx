@@ -64,7 +64,7 @@ export default function UnregisteredCourses({ student, semester }: Props) {
 
     const handleRegisterCourses = () => {
         const payload: StudentRegisterCoursePayload = {
-            studentId: student.studentId,
+            studentId: student.id,
             courseIds: selectedRows.map((row) => row.id),
             semesterId: semester.id,
         };
@@ -79,9 +79,9 @@ export default function UnregisteredCourses({ student, semester }: Props) {
     }, [unregisteredCourses]);
 
     useEffect(() => {
-        if (student?.studentId && semester?.id && student?.departmentId) {
+        if (student?.id && semester?.id && student?.departmentId) {
             setParams({
-                studentId: student.studentId,
+                studentId: student.id,
                 semesterId: semester.id,
                 departmentId: student.departmentId,
             });
@@ -91,7 +91,7 @@ export default function UnregisteredCourses({ student, semester }: Props) {
     return (
         <View className='items-center'>
             <Heading className="break-words text-lg">
-                OPENING COURSES {semester.name.toUpperCase()} SEMESTER
+                OPENING COURSES {semester?.name?.toUpperCase()} SEMESTER
             </Heading>
             <Heading className="break-words text-l">
                 {formatDate(semester.registrationStartDate)} - {formatDate(semester.registrationEndDate)}

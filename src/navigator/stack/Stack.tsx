@@ -7,16 +7,19 @@ import { colors } from '@/src/theme';
 // views
 import Home from '@/src/views/Home';
 import Details from '@/src/views/Details';
-import Profile from '@/src/views/Profile';
 import Login from '@/src/views/Login';
 import ForgotPassword from '@/src/views/ForgotPassword';
 import Settings from '@/src/views/Settings';
 import EditProfile from '@/src/views/EditProfile';
 import HomeFunctions from '@/src/views/HomeFunctions';
 import News from '@/src/views/News';
-import NewsDetail from '@/src/views/NewsDetail/NewsDetail';
+import NewsDetail from '@/src/views/NewsDetail';
 import ChangePasword from '@/src/views/ChangePassword';
 import CourseRegistration from '@/src/views/CourseRegistration';
+import ChatRoom from '@/src/views/Chat/ChatRoom/ChatRoom';
+import Chat from '@/src/views/Chat/Conversations/Chat';
+import Privacy from '@/src/views/Privacy';
+import Terms from '@/src/views/Terms';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -88,14 +91,26 @@ export function HomeStackNavigator({ navigation }: StackProps) {
   );
 }
 
-export function ProfileStackNavigator({ navigation }: StackProps) {
+export function ChatStackNavigator({ navigation }: StackProps) {
   return (
     <Stack.Navigator screenOptions={navigationProps}>
       <Stack.Screen
-        component={Profile}
-        name="ProfileStack"
+        component={Chat}
+        name="ChatStack"
         options={{
-          title: 'Profile',
+          title: 'Chat',
+          // headerTitle: () => <StackHeaderTitle />,
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#3b82f6',
+          },
+        }}
+      />
+      <Stack.Screen
+        component={ChatRoom}
+        name="ChatRoom"
+        options={{
+          title: 'ChatRoom',
           // headerTitle: () => <StackHeaderTitle />,
           headerTitleAlign: 'center',
           headerStyle: {
@@ -163,6 +178,20 @@ export function LoginStackNavigator({ navigation }: StackProps) {
       <Stack.Screen
         component={Login}
         name="LoginStack"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        component={Privacy}
+        name="Privacy"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        component={Terms}
+        name="Terms"
         options={{
           headerShown: false,
         }}

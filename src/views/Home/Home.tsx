@@ -10,6 +10,8 @@ import { ScheduleComponent } from '../../components/ScheduleComponent/ScheduleCo
 import { useGetAllBlogs } from '@/src/queries/Blogs';
 import { formatDate } from '@/src/utils';
 import HomeIcon from '@/src/components/HomeIcon/HomeIcon';
+import { useAuthStore } from '@/src/zustand/auth/useAuthStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home({ navigation }: StackProps) {
 
@@ -32,6 +34,16 @@ export default function Home({ navigation }: StackProps) {
   const handleNewsDetailPress = (id: string) => {
     navigation.navigate("NewsDetailStack", { newsId: id })
   }
+
+  const { clearAuth } = useAuthStore();
+
+  const LogOut = async () => {
+    clearAuth();
+    await AsyncStorage.setItem("accessToken", "")
+    await AsyncStorage.setItem("refreshToken", "")
+    navigation.replace("LoginStackNavigator")
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-[#f7f7fb]">
       <View className="w-full h-full">
@@ -47,7 +59,7 @@ export default function Home({ navigation }: StackProps) {
               <Text className='text-white text-xl ml-4'>Hello, {userinfo?.lastName}!</Text>
             </View>
             <TouchableOpacity onPress={() => navigation.navigate("DetailsStack", { from: "Home" })}>
-              <Icon name="notifications-outline" type="ionicon" color="#fff" size={20} className='bg-blue-400 p-2 rounded-full' />
+              <Icon name="notifications-outline" type="ionicon" color="#fff" size={20} onPress={() => LogOut()} className='bg-blue-400 p-2 rounded-full' />
             </TouchableOpacity>
           </View>
           <ScheduleComponent />

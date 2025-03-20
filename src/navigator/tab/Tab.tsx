@@ -1,9 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { colors } from '@/src/theme';
 import { TabParamList, TabBarStatus } from './Tab.typeDefs';
-import { HomeStackNavigator, ProfileStackNavigator, SettingsStackNavigator } from '../stack/Stack';
+import { ChatStackNavigator, HomeStackNavigator, SettingsStackNavigator } from '../stack/Stack';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -11,8 +11,8 @@ const renderTabBarIcon = (tabName: keyof TabParamList) => (tabStatus: TabBarStat
   switch (tabName) {
     case 'HomeTab':
       return <AntDesign name="home" size={24} color={tabStatus.color} />;
-    case 'ProfileTab':
-      return <AntDesign name="profile" size={24} color={tabStatus.color} />;
+    case 'ChatTab':
+      return <Ionicons name="chatbubble-ellipses-outline" size={24} color={tabStatus.color} />;
     case 'SettingsTab':
       return <AntDesign name="setting" size={24} color={tabStatus.color} />;
   }
@@ -31,9 +31,9 @@ export default function TabNavigator() {
       })}>
       <Tab.Screen name="HomeTab" component={HomeStackNavigator} options={{ title: 'Home' }} />
       <Tab.Screen
-        name="ProfileTab"
-        component={ProfileStackNavigator}
-        options={{ title: 'Profile' }}
+        name="ChatTab"
+        component={ChatStackNavigator}
+        options={{ title: 'Chat' }}
       />
       <Tab.Screen
         name="SettingsTab"

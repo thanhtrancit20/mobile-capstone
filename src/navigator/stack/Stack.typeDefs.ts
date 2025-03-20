@@ -19,6 +19,10 @@ export type StackParamList = {
   ChangePasswordStack: undefined;
   ScheduleScreenStack: undefined;
   CourseRegistration: undefined;
+  ChatStack: undefined;
+  ChatRoom: { recipientId: string };
+  Privacy: undefined;
+  Terms: undefined;
 };
 
 export type StackProps = NativeStackScreenProps<StackParamList, keyof StackParamList>;

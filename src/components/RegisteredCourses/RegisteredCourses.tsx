@@ -62,7 +62,7 @@ export default function RegisteredCourses({ student, semester }: Props) {
 
     const handleRemoveRegisteredCourses = () => {
         const payload: RemovalRegisterCourseForStudentPayload = {
-            studentId: student.studentId,
+            studentId: student.id,
             courseCodes: selectedRows.map((row) => row.code),
             semesterId: semester.id,
         };
@@ -76,9 +76,9 @@ export default function RegisteredCourses({ student, semester }: Props) {
     }, [registeredCourses]);
 
     useEffect(() => {
-        if (student?.studentId && semester?.id && student?.departmentId) {
+        if (student?.id && semester?.id && student?.departmentId) {
             setParams({
-                studentId: student.studentId,
+                studentId: student.id,
                 semesterId: semester.id,
                 departmentId: student.departmentId,
             });
