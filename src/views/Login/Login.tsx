@@ -16,11 +16,37 @@ import { StackProps } from '@/src/navigator';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGetUserInfo } from '@/src/queries/Auth/useGetUserInfo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { VITE_PUBLIC_GOOGLE_CLIENT_ID_ANDROID, VITE_PUBLIC_GOOGLE_CLIENT_ID_WEB } from "@env";
+import * as Google from 'expo-auth-session/providers/google'
+import * as WebBrowser from 'expo-web-browser'
 
 export default function Login({ navigation }: StackProps) {
   const { setUser, setTokens, clearAuth } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const webClientId = VITE_PUBLIC_GOOGLE_CLIENT_ID_WEB;
+  const androidClientId = VITE_PUBLIC_GOOGLE_CLIENT_ID_ANDROID;
+  WebBrowser.maybeCompleteAuthSession();
+
+  const config = {
+    webClientId,
+    androidClientId
+  }
+
+  const [request, response, promptAsync] = Google.useAuthRequest(config);
+  const handleToken = () => {
+    if (response?.type === 'success') {
+      const { authentication } = response;
+      const token = authentication.accessToken;
+      console.log("access token", token)
+    }
+  }
+
+
+  useEffect(() => {
+    handleToken()
+  }, [response])
 
   const handleState = () => {
     setShowPassword(showState => !showState);
@@ -142,7 +168,8 @@ export default function Login({ navigation }: StackProps) {
           size="xl"
           variant="solid"
           className="bg-blue-500 w-2/4 my-5"
-          onPress={handleSubmit(onSubmit)}
+          // onPress={handleSubmit(onSubmit)}
+          onPress={() => promptAsync()}
           isDisabled={loading}
         >
           {loading ? <ActivityIndicator color="white" /> : <ButtonText>Login</ButtonText>}
