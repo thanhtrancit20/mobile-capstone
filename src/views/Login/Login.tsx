@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, View, ActivityIndicator, Pressable } from 'react-native';
+import { TouchableOpacity, View, ActivityIndicator, Pressable, Platform } from 'react-native';
 import { useAuthStore } from '@/src/zustand/auth/useAuthStore';
 import { useLogin } from '@/src/queries/Auth/useLogin';
 import { Controller, useForm } from 'react-hook-form';
@@ -16,37 +16,49 @@ import { StackProps } from '@/src/navigator';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGetUserInfo } from '@/src/queries/Auth/useGetUserInfo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { VITE_PUBLIC_GOOGLE_CLIENT_ID_ANDROID, VITE_PUBLIC_GOOGLE_CLIENT_ID_WEB } from "@env";
-import * as Google from 'expo-auth-session/providers/google'
-import * as WebBrowser from 'expo-web-browser'
+import { toast } from '@backpackapp-io/react-native-toast';
+// import { VITE_PUBLIC_GOOGLE_CLIENT_ID_ANDROID, VITE_PUBLIC_GOOGLE_CLIENT_ID_WEB } from "@env";
+// import * as Google from 'expo-auth-session/providers/google'
+// import * as WebBrowser from 'expo-web-browser'
+// import { DiscoveryDocument, makeRedirectUri, useAuthRequest } from 'expo-auth-session';
 
 export default function Login({ navigation }: StackProps) {
   const { setUser, setTokens, clearAuth } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const webClientId = VITE_PUBLIC_GOOGLE_CLIENT_ID_WEB;
-  const androidClientId = VITE_PUBLIC_GOOGLE_CLIENT_ID_ANDROID;
-  WebBrowser.maybeCompleteAuthSession();
 
-  const config = {
-    webClientId,
-    androidClientId
-  }
+  // const config = {
+  //   clientId: Platform.select({
+  //     ios: 'YOUR_IOS_CLIENT_ID',
+  //     android: '43230472112-gev21dtv0qds1oimajom87u2ddlgn1cg.apps.googleusercontent.com',
+  //     default: '43230472112-qsp8kg4rf4mblh71teii637pphacgjb5.apps.googleusercontent.com',
+  //   }),
+  //   redirectUri: makeRedirectUri(),
+  //   scopes: ['profile', 'email'],
+  // };
 
-  const [request, response, promptAsync] = Google.useAuthRequest(config);
-  const handleToken = () => {
-    if (response?.type === 'success') {
-      const { authentication } = response;
-      const token = authentication.accessToken;
-      console.log("access token", token)
-    }
-  }
+  // const discovery: DiscoveryDocument = {
+  //   authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
+  //   tokenEndpoint: 'https://oauth2.googleapis.com/token',
+  //   revocationEndpoint: 'https://oauth2.googleapis.com/revoke',
+  //   userInfoEndpoint: 'https://openidconnect.googleapis.com/v1/userinfo',
+  // };
 
+  // const [request, response, promptAsync] = useAuthRequest(config, discovery);
 
-  useEffect(() => {
-    handleToken()
-  }, [response])
+  // const handleToken = () => {
+  //   if (response?.type === 'success') {
+  //     const token = response.authentication?.accessToken;
+  //     console.log('Access Token:', token);
+  //   } else {
+  //     console.error('Authentication failed or no token available');
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   handleToken();
+  // }, [response]);
 
   const handleState = () => {
     setShowPassword(showState => !showState);
@@ -76,7 +88,7 @@ export default function Login({ navigation }: StackProps) {
       onNavigate();
     },
     onError: (error) => {
-      console.log(error)
+      toast.error(error.message);
     },
   });
 
@@ -90,7 +102,8 @@ export default function Login({ navigation }: StackProps) {
       }
     },
     onError: (error) => {
-      console.log(error)
+      toast.error("Username or password is incorrect!");
+      setLoading(false);
     },
   });
   const onSubmit = async (data: LoginFormType) => {
@@ -168,8 +181,8 @@ export default function Login({ navigation }: StackProps) {
           size="xl"
           variant="solid"
           className="bg-blue-500 w-2/4 my-5"
-          // onPress={handleSubmit(onSubmit)}
-          onPress={() => promptAsync()}
+          onPress={handleSubmit(onSubmit)}
+          // onPress={() => promptAsync()}
           isDisabled={loading}
         >
           {loading ? <ActivityIndicator color="white" /> : <ButtonText>Login</ButtonText>}
