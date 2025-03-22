@@ -6,6 +6,8 @@ import Navigator from './src/navigator';
 import store from './src/utils/store';
 import { QueryClient, QueryClientProvider } from "react-query"
 import { ONE_HOUR } from './src/config/constants';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Toasts } from '@backpackapp-io/react-native-toast';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,11 +32,14 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <GluestackUIProvider mode="light">
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <Provider store={store}>
-            <Navigator />
-          </Provider>
-        </GestureHandlerRootView>
+        <SafeAreaProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <Provider store={store}>
+              <Navigator />
+              <Toasts />
+            </Provider>
+          </GestureHandlerRootView>
+        </SafeAreaProvider>
       </GluestackUIProvider>
     </QueryClientProvider>
   );

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Heading } from '@/components/ui/heading'
 import { Checkbox, DataTable } from 'react-native-paper'
@@ -21,6 +21,7 @@ export default function RegisteredCourses({ student, semester }: Props) {
     const [sortDirection, setSortDirection] = useState<'ascending' | 'descending'>('ascending');
     const [sortedCourses, setSortedCourses] = useState<CourseResponse[]>([]);
     const [selectedRows, setSelectedRows] = useState<CourseResponse[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSort = (column: keyof CourseResponse) => {
         const newSortDirection = sortedColumn === column && sortDirection === 'ascending' ? 'descending' : 'ascending';
@@ -60,15 +61,24 @@ export default function RegisteredCourses({ student, semester }: Props) {
         },
     });
 
-    const handleRemoveRegisteredCourses = () => {
+    const handleRemoveRegisteredCourses = async () => {
+        if (isLoading || selectedRows.length === 0) return;
+
+        setIsLoading(true);
         const payload: RemovalRegisterCourseForStudentPayload = {
             studentId: student.id,
             courseCodes: selectedRows.map((row) => row.code),
             semesterId: semester.id,
         };
-
-        onRemoveRegistrations(payload);
-        setSelectedRows([]);
+        try {
+            console.log(payload);
+            await onRemoveRegistrations(payload);
+            setSelectedRows([]);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -123,12 +133,13 @@ export default function RegisteredCourses({ student, semester }: Props) {
                     </TouchableOpacity>
                 ))}
                 <Button
-                    size="xl" variant="solid" action="negative"
-                    className="w-1/3 my-5 self-end mx-2"
-
+                    size="xl"
+                    variant="solid"
+                    className="bg-red-500 w-1/3 my-5 self-end mx-2"
                     onPress={handleRemoveRegisteredCourses}
+                    isDisabled={isLoading}
                 >
-                    <ButtonText>Unregister</ButtonText>
+                    {isLoading ? <ActivityIndicator color="white" /> : <ButtonText>Unregister</ButtonText>}
                 </Button>
             </DataTable>
         </View >

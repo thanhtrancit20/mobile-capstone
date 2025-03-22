@@ -20,6 +20,8 @@ import ChatRoom from '@/src/views/Chat/ChatRoom/ChatRoom';
 import Chat from '@/src/views/Chat/Conversations/Chat';
 import Privacy from '@/src/views/Privacy';
 import Terms from '@/src/views/Terms';
+import CheckYourEmail from '@/src/views/ForgotPassword/CheckYourEmail';
+import ResetPassword from '@/src/views/ResetPassword/ResetPassword';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -199,6 +201,20 @@ export function LoginStackNavigator({ navigation }: StackProps) {
       <Stack.Screen
         component={ForgotPassword}
         name="ForgotPasswordStack"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        component={ResetPassword}
+        name="ResetPassword"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        component={CheckYourEmail}
+        name="CheckYourEmail"
         options={{
           headerShown: false,
         }}

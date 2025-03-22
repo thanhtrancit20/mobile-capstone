@@ -18,3 +18,13 @@ export interface ChangePasswordPayload {
   newPassword: string;
   confirmPassword: string;
 }
+
+export interface ForgotPasswordPayload {
+  username: string;
+}
+
+export interface ResetPasswordPayload {
+  token: string,
+  newPassword: string,
+  confirmPassword: string;
+}

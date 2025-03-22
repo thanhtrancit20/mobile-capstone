@@ -1,15 +1,54 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { LoginStackNavigator, StackParamList } from './stack';
-import Login from '../views/Login';
-import DrawerNavigator from './drawer';
 import TabNavigator from './tab';
+import * as Linking from 'expo-linking';
+import { useEffect } from 'react';
+import ForgotPassword from '../views/ForgotPassword';
 
 const Stack = createNativeStackNavigator<StackParamList>();
+const prefix = Linking.createURL('/');
+const standalonePrefix = 'myapp://';
 
 function Navigator() {
+  console.log('🔗 Linking Prefix:', prefix);
+
+  const linking = {
+    prefixes: [prefix, standalonePrefix],
+    config: {
+      screens: {
+        LoginStackNavigator: {
+          path: 'login',
+          screens: {
+            ResetPassword: 'reset-password'
+          },
+        },
+      },
+    },
+  };
+
+  console.log('🔗 Linking Config:', linking);
+
+  useEffect(() => {
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        console.log('🚀 App được mở từ link:', url);
+      } else {
+        console.log('❌ Không có URL khi mở app');
+      }
+    });
+
+    const subscription = Linking.addEventListener('url', (event) => {
+      console.log('🔗 URL được mở khi app đang chạy:', event.url);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking} onStateChange={(state) => console.log("🛠 Navigation state changed:", state)}>
       <Stack.Navigator>
         <Stack.Screen name="LoginStackNavigator" component={LoginStackNavigator} options={{
           headerShown: false

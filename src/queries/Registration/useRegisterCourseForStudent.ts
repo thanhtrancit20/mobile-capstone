@@ -8,7 +8,7 @@ export function useRegisterCourseForStudent(
   options?: UseMutationOptions<ApiResponseType<void>, Error, StudentRegisterCoursePayload>,
 ) {
   const {
-    mutate: onRegisterCourse,
+    mutateAsync: onRegisterCourse,
     isLoading,
     isSuccess,
     isError,

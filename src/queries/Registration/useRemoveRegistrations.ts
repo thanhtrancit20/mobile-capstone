@@ -12,7 +12,7 @@ export function useRemoveRegistrations(
   >,
 ) {
   const {
-    mutate: onRemoveRegistrations,
+    mutateAsync: onRemoveRegistrations,
     isLoading,
     isSuccess,
     isError,

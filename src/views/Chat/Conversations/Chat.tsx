@@ -13,7 +13,7 @@ export default function Chat({ navigation }: StackProps) {
 
   return (
     <SafeAreaView className="flex-1 bg-[#f7f7fb]">
-      <View className="w-full h-full">
+      <View className="w-full h-full mt-4">
         <FlatList
           data={conversations}
           keyExtractor={(item) => `${item.id}-${item.userId}`}

@@ -1,5 +1,5 @@
-import React from 'react';
-import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { FlatList, Image, RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { StackProps } from '@/src/navigator/stack';
 import { Avatar, Icon } from '@rneui/base';
 import { useGetUserInfo } from '@/src/queries/Auth/useGetUserInfo';
@@ -12,14 +12,16 @@ import { formatDate } from '@/src/utils';
 import HomeIcon from '@/src/components/HomeIcon/HomeIcon';
 import { useAuthStore } from '@/src/zustand/auth/useAuthStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function Home({ navigation }: StackProps) {
+  const [refreshing, setRefreshing] = useState(false);
 
   const { userinfo, isFetching, onGetUserInfo } = useGetUserInfo({
     enabled: true,
   });
 
-  const { blogs, setParams, totalElements } = useGetAllBlogs({
+  const { blogs, setParams, totalElements, onGetAllBlogs } = useGetAllBlogs({
     enabled: true,
   });
 
@@ -43,9 +45,14 @@ export default function Home({ navigation }: StackProps) {
     await AsyncStorage.setItem("refreshToken", "")
     navigation.replace("LoginStackNavigator")
   }
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await onGetAllBlogs();
+    setRefreshing(false);
+  };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#f7f7fb]">
+    <ScrollView className="flex-1 bg-[#f7f7fb]" refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       <View className="w-full h-full">
         <View className="w-full h-1/4 bg-blue-500 px-5 pt-14">
           <View className="flex-row items-center justify-between">
@@ -103,11 +110,11 @@ export default function Home({ navigation }: StackProps) {
             <TouchableOpacity className="bg-white rounded-lg mx-2 w-60 shadow-md" onPress={() => handleNewsDetailPress(item.id.toString())}>
               <Image source={{ uri: `http://10.0.2.2:8085${item.thumbnailUrl}` }} className="w-full h-40 rounded-lg" resizeMode="cover" />
               <Text className="text-base font-semibold mt-2 px-1.5" numberOfLines={2}>{item.title}</Text>
-              <Text className="text-base p-1.5">{formatDate(item.createdDate)}</Text>
+              <Text className="text-base p-1.5">{formatDate(item.createdDate).toString() || ""}</Text>
             </TouchableOpacity>
           )}
         />
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };

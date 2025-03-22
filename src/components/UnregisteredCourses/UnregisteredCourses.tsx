@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Heading } from '@/components/ui/heading'
 import { formatDate } from '@/src/utils'
@@ -18,11 +18,11 @@ type Props = {
 export default function UnregisteredCourses({ student, semester }: Props) {
     const { handleInvalidateRegisteredCourses } = useGetRegisteredCourseForStudent();
     const { unregisteredCourses, setParams, handleInvalidateUnregisteredCourses } = useGetUnregisteredCourseForStudent();
-
     const [sortedColumn, setSortedColumn] = useState<keyof CourseResponse>();
     const [sortDirection, setSortDirection] = useState<'ascending' | 'descending'>('ascending');
     const [sortedCourses, setSortedCourses] = useState<CourseResponse[]>([]);
     const [selectedRows, setSelectedRows] = useState<CourseResponse[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSort = (column: keyof CourseResponse) => {
         const newSortDirection = sortedColumn === column && sortDirection === 'ascending' ? 'descending' : 'ascending';
@@ -62,16 +62,26 @@ export default function UnregisteredCourses({ student, semester }: Props) {
         },
     });
 
-    const handleRegisterCourses = () => {
+    const handleRegisterCourses = async () => {
+        if (isLoading || selectedRows.length === 0) return;
+
+        setIsLoading(true);
+
         const payload: StudentRegisterCoursePayload = {
             studentId: student.id,
             courseIds: selectedRows.map((row) => row.id),
             semesterId: semester.id,
         };
 
-        console.log(payload);
-        onRegisterCourse(payload);
-        setSelectedRows([]);
+        try {
+            console.log(payload);
+            await onRegisterCourse(payload);
+            setSelectedRows([]);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -94,7 +104,7 @@ export default function UnregisteredCourses({ student, semester }: Props) {
                 OPENING COURSES {semester?.name?.toUpperCase()} SEMESTER
             </Heading>
             <Heading className="break-words text-l">
-                {formatDate(semester.registrationStartDate)} - {formatDate(semester.registrationEndDate)}
+                {formatDate(semester.registrationStartDate).toString() || ""} - {formatDate(semester.registrationEndDate).toString() || ""}
             </Heading>
             <DataTable>
                 <DataTable.Header>
@@ -132,8 +142,9 @@ export default function UnregisteredCourses({ student, semester }: Props) {
                     variant="solid"
                     className="bg-blue-500 w-1/3 my-5 self-end mx-2"
                     onPress={handleRegisterCourses}
+                    isDisabled={isLoading}
                 >
-                    <ButtonText>Register</ButtonText>
+                    {isLoading ? <ActivityIndicator color="white" /> : <ButtonText>Register</ButtonText>}
                 </Button>
             </DataTable>
         </View>

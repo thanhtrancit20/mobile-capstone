@@ -7,7 +7,7 @@ export type StackParamList = {
   ProfileStack: undefined;
   // add more screen props...
   LoginStack: undefined;
-  ForgotPasswordStack: { from: string };
+  ForgotPasswordStack: undefined;
 
   SettingsStack: undefined;
   EditProfileStack: undefined;
@@ -23,6 +23,8 @@ export type StackParamList = {
   ChatRoom: { recipientId: string };
   Privacy: undefined;
   Terms: undefined;
+  ResetPassword: undefined;
+  CheckYourEmail: { username: string };
 };
 
 export type StackProps = NativeStackScreenProps<StackParamList, keyof StackParamList>;

@@ -1,12 +1,14 @@
-import { Text, View, ScrollView, TouchableOpacity, Image, FlatList, ActivityIndicator } from 'react-native';
+import { useState, useEffect } from 'react';
+import { Text, View, ScrollView, TouchableOpacity, Image, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 import { StackProps } from '@/src/navigator/stack';
 import { useGetAllBlogs } from '@/src/queries/Blogs';
 import { formatDate } from '@/src/utils';
-import { useEffect } from 'react';
 
 export default function News({ navigation }: StackProps) {
   const { blogs, isFetching, onGetAllBlogs, setParams } = useGetAllBlogs();
-  const mobileBlogs = blogs.filter((item) => item.isMobile)
+  const [refreshing, setRefreshing] = useState(false);
+
+  const mobileBlogs = blogs.filter((item) => item.isMobile);
 
   useEffect(() => {
     setParams({ page: 1, pageSize: 10 });
@@ -19,12 +21,20 @@ export default function News({ navigation }: StackProps) {
     navigation.navigate("NewsDetailStack", { newsId: id });
   };
 
-  return (
-    <ScrollView className="flex-1 p-5 bg-[#f7f7fb]">
-      <TouchableOpacity onPress={() => onGetAllBlogs()} className="bg-blue-500 p-3 rounded-lg mb-4">
-        <Text className="text-white text-center font-bold">Tải lại</Text>
-      </TouchableOpacity>
+  // Xử lý làm mới danh sách
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await onGetAllBlogs();
+    setRefreshing(false);
+  };
 
+  return (
+    <ScrollView
+      className="flex-1 p-5 bg-[#f7f7fb]"
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       {isFetching && <ActivityIndicator size="large" color="#0000ff" className="mb-4" />}
 
       {latestNews && (
@@ -35,7 +45,7 @@ export default function News({ navigation }: StackProps) {
             resizeMode="cover"
           />
           <Text className="text-lg font-bold mt-3" numberOfLines={2}>{latestNews.title}</Text>
-          <Text className="text-base mt-3">{formatDate(latestNews.createdDate)}</Text>
+          <Text className="text-base mt-3">{formatDate(latestNews.createdDate).toString() || ""}</Text>
         </TouchableOpacity>
       )}
 
@@ -53,7 +63,7 @@ export default function News({ navigation }: StackProps) {
             />
             <View className="ml-3 flex-1 justify-center">
               <Text className="text-lg font-semibold" numberOfLines={2}>{item.title}</Text>
-              <Text className="text-base">{formatDate(item.createdDate.toString())}</Text>
+              <Text className="text-base">{formatDate(item.createdDate).toString() || ""}</Text>
             </View>
           </TouchableOpacity>
         )}

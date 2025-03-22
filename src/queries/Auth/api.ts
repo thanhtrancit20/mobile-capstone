@@ -1,5 +1,5 @@
 import { useHttpPrivateRequest } from '@/src/services/httpRequest/useHttpPrivateRequest';
-import { ChangePasswordPayload, LoginPayload } from './types';
+import { ChangePasswordPayload, ForgotPasswordPayload, LoginPayload, ResetPasswordPayload } from './types';
 import { API_URLS } from '../keys';
 import useHttpPublicRequest from '@/src/services/httpRequest/useHttpPublicRequest ';
 
@@ -22,12 +22,21 @@ const useApi = (baseURL = API_URLS.IDENTITY) => {
   const changePassword = (body: ChangePasswordPayload) => {
     return privateApi.put('/api/v1/auth/change-password', body);
   };
+  const forgotPassword = (body: ForgotPasswordPayload) => {
+    return privateApi.post('/api/v1/users/forgot-password', body);
+  };
+
+  const resetPassword = (body: ResetPasswordPayload) => {
+    return privateApi.post('/api/v1/users/reset-password', body);
+  };
 
   return {
     authenticate,
     getUserInfo,
     getRefreshToken,
     changePassword,
+    forgotPassword,
+    resetPassword,
   };
 };
 

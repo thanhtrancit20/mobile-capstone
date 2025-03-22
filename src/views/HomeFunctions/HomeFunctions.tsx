@@ -20,7 +20,8 @@ const HomeFunctions = ({ navigation }: StackProps) => {
                             key={item.id}
                             title={item.title}
                             iconProps={item.iconProps}
-                            onPress={handlePress} />
+                            screenName={item.screenName}
+                        />
                     ))}
                 </View>
             </View>

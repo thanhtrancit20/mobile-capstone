@@ -15,7 +15,7 @@ export default function NewsDetail({ route }: { route: NewsDetailRouteProp }) {
   const { width } = useWindowDimensions();
 
   return (
-    <ScrollView className="bg-[#f7f7fb] flex-1">
+    <ScrollView className="bg-white flex-1">
       <Image
         source={{ uri: `http://10.0.2.2:8085${blog?.thumbnailUrl}` }}
         className="w-full h-56"
