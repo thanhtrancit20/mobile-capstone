@@ -14,9 +14,13 @@ export function useGetApprovedCoursesForStudentByStudentId(
   options?: UseQueryOptions<
     ApiResponseType<PaginationResponseType<RegistrationResponse[]>>,
     Error
-  > & { id: string },
+  > & { id: string; semesterId?: number }
 ) {
-  const [tableParams, setTableParams] = useState<GetPropertiesParams>();
+  const [tableParams, setTableParams] = useState<GetPropertiesParams>({
+    current: 1,
+    pageSize: 10,
+    semesterId: options?.semesterId,  // Initial semesterId from options
+  });
 
   const {
     data,
@@ -24,10 +28,7 @@ export function useGetApprovedCoursesForStudentByStudentId(
     isFetching,
     refetch: onGetApprovedCoursesForStudentByStudentId,
   } = useQuery<ApiResponseType<PaginationResponseType<RegistrationResponse[]>>, Error>(
-    [
-      REGISTER_COURSE_API_KEY.GET_APPROVED_COURSES,
-      { id: options?.id, tableParams: tableParams },
-    ],
+    [REGISTER_COURSE_API_KEY.GET_APPROVED_COURSES, { id: options?.id, tableParams }],
     async ({ queryKey }) => {
       const [, ...params] = queryKey;
       return responseWrapper<ApiResponseType<PaginationResponseType<RegistrationResponse[]>>>(
@@ -36,20 +37,18 @@ export function useGetApprovedCoursesForStudentByStudentId(
       );
     },
     {
+      // Ensure the request is only made when semesterId and id are available
+      enabled: !!options?.id && !!tableParams.semesterId,
       notifyOnChangeProps: ['data', 'isFetching'],
       keepPreviousData: true,
-      enabled: !!options?.id,
       ...options,
-    },
+    }
   );
 
   const queryClient = useQueryClient();
 
   const handleInvalidateApprovedCourses = () =>
-    queryClient.invalidateQueries([
-      REGISTER_COURSE_API_KEY.GET_APPROVED_COURSES,
-      tableParams,
-    ]);
+    queryClient.invalidateQueries([REGISTER_COURSE_API_KEY.GET_APPROVED_COURSES, tableParams]);
 
   const {
     result: { current, totalPages, pageSize, totalElements, data: approvedCourses = [] } = {},

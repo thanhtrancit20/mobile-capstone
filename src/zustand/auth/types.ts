@@ -17,6 +17,7 @@ export type User = {
   degreeLevel: string;
   departmentId: string
   fullname: string;
+  faceVerified: boolean;
 };
 export enum UserStatus {
   ACTIVE = 'ACTIVE',

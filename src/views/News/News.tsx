@@ -3,6 +3,7 @@ import { Text, View, ScrollView, TouchableOpacity, Image, FlatList, ActivityIndi
 import { StackProps } from '@/src/navigator/stack';
 import { useGetAllBlogs } from '@/src/queries/Blogs';
 import { formatDate } from '@/src/utils';
+import { replaceLocalhost } from '@/src/utils/replaceLocalhost';
 
 export default function News({ navigation }: StackProps) {
   const { blogs, isFetching, onGetAllBlogs, setParams } = useGetAllBlogs();
@@ -40,7 +41,7 @@ export default function News({ navigation }: StackProps) {
       {latestNews && (
         <TouchableOpacity className="mb-5" onPress={() => handleNewsDetailPress(latestNews.id.toString())}>
           <Image
-            source={{ uri: `http://10.0.2.2:8085${latestNews.thumbnailUrl}` }}
+            source={{ uri: replaceLocalhost(latestNews.thumbnailUrl) }}
             className="w-full h-56 rounded-lg"
             resizeMode="cover"
           />
@@ -57,7 +58,7 @@ export default function News({ navigation }: StackProps) {
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => handleNewsDetailPress(item.id.toString())} className="flex-row bg-white mb-3 rounded-lg shadow-md">
             <Image
-              source={{ uri: `http://10.0.2.2:8085${item.thumbnailUrl}` }}
+              source={{ uri: replaceLocalhost(item.thumbnailUrl) }}
               className="w-24 h-24 rounded-lg"
               resizeMode="cover"
             />

@@ -82,8 +82,10 @@ export interface RegisterCoursePayload {
 }
 
 export interface RegistrationResponse {
+  id: string;
   studentId: string;
   courseCode: string;
+  courseName: string;
   status: RegisterStatus;
   semesterName: string;
   semesterId: string;
@@ -91,6 +93,7 @@ export interface RegistrationResponse {
   cancellationDeadline: Date;
   courseDetails?: CourseResponse;
   baseCourseDetails?: BaseCourseResponse;
+  thumbnail: string;
 }
 
 export type GetCoursePropertiesParams = {

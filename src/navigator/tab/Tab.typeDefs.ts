@@ -10,6 +10,7 @@ export type TabParamList = {
   HomeTab: undefined;
   ChatTab: undefined;
   SettingsTab: undefined;
+  CourseTab: undefined
   // add more tab params...
 };
 

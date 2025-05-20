@@ -25,6 +25,10 @@ export type StackParamList = {
   Terms: undefined;
   ResetPassword: undefined;
   CheckYourEmail: { username: string };
+  FaceRegister: undefined;
+  FaceLogin: undefined;
+  Courses: undefined;
+  CourseDetailTabs: { courseId: string };
 };
 
 export type StackProps = NativeStackScreenProps<StackParamList, keyof StackParamList>;

@@ -15,6 +15,14 @@ const useApi = (baseURL = API_URLS.IDENTITY) => {
     return privateApi.get('/api/v1/users/me');
   };
 
+  const getFaceVerified = () => {
+    return privateApi.get('/api/v1/users/myInfo');
+  };
+
+  const updateFaceVerified = (payload) => {
+    return privateApi.patch('/api/v1/users/update-face-verified', payload);
+  };
+
   const getRefreshToken = () => {
     return publicApi.post('/api/v1/auth/refresh');
   };
@@ -37,6 +45,8 @@ const useApi = (baseURL = API_URLS.IDENTITY) => {
     changePassword,
     forgotPassword,
     resetPassword,
+    getFaceVerified,
+    updateFaceVerified
   };
 };
 

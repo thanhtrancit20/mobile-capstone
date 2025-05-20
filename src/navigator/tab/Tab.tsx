@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { colors } from '@/src/theme';
 import { TabParamList, TabBarStatus } from './Tab.typeDefs';
-import { ChatStackNavigator, HomeStackNavigator, SettingsStackNavigator } from '../stack/Stack';
+import { ChatStackNavigator, CourseStackNavigator, HomeStackNavigator, SettingsStackNavigator } from '../stack/Stack';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -15,6 +15,8 @@ const renderTabBarIcon = (tabName: keyof TabParamList) => (tabStatus: TabBarStat
       return <Ionicons name="chatbubble-ellipses-outline" size={24} color={tabStatus.color} />;
     case 'SettingsTab':
       return <AntDesign name="setting" size={24} color={tabStatus.color} />;
+    case 'CourseTab':
+      return <AntDesign name="book" size={24} color={tabStatus.color} />;
   }
 };
 
@@ -34,6 +36,11 @@ export default function TabNavigator() {
         name="ChatTab"
         component={ChatStackNavigator}
         options={{ title: 'Chat' }}
+      />
+      <Tab.Screen
+        name="CourseTab"
+        component={CourseStackNavigator}
+        options={{ title: 'Courses' }}
       />
       <Tab.Screen
         name="SettingsTab"

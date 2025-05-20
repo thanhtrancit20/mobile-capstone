@@ -23,9 +23,17 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourappname",
+      "buildNumber": "1"
     },
     "android": {
+      "package": "com.yourappname",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "CAMERA_ROLL"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "src/assets/images/logo-sm.png",
         "backgroundColor": "#ffffff"
@@ -42,12 +50,18 @@
     "updates": {
       "url": "https://u.expo.dev/18adc0d0-eb1d-11e9-8009-d524ed5cc4a7"
     },
-    "runtimeVersion": {
-      "policy": "sdkVersion"
-    },
+    "runtimeVersion": "1.0.0",
     "plugins": [
+      "react-native-vision-camera",
       "expo-asset",
-      "expo-font"
+      "expo-font",
+      "react-native-face-detector-camera",
+      [
+        "react-native-face-detector-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera"
+        }
+      ]
     ]
   }
 }

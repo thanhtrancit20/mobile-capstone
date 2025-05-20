@@ -51,5 +51,6 @@ export enum API_QUERIES {
   TAGS_LIST = '/tag-list',
   POSTS_LIST = '/post-list',
   POST_DETAIL = '/post-detail',
-  IDENTITY = '/identity'
+  IDENTITY = '/identity',
+  FACE_VERIFIED = '/face-verifed'
 }

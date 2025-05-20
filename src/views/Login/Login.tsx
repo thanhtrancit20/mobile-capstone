@@ -17,48 +17,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGetUserInfo } from '@/src/queries/Auth/useGetUserInfo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { toast } from '@backpackapp-io/react-native-toast';
-// import { VITE_PUBLIC_GOOGLE_CLIENT_ID_ANDROID, VITE_PUBLIC_GOOGLE_CLIENT_ID_WEB } from "@env";
-// import * as Google from 'expo-auth-session/providers/google'
-// import * as WebBrowser from 'expo-web-browser'
-// import { DiscoveryDocument, makeRedirectUri, useAuthRequest } from 'expo-auth-session';
 
 export default function Login({ navigation }: StackProps) {
   const { setUser, setTokens, clearAuth } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
-
-  // const config = {
-  //   clientId: Platform.select({
-  //     ios: 'YOUR_IOS_CLIENT_ID',
-  //     android: '43230472112-gev21dtv0qds1oimajom87u2ddlgn1cg.apps.googleusercontent.com',
-  //     default: '43230472112-qsp8kg4rf4mblh71teii637pphacgjb5.apps.googleusercontent.com',
-  //   }),
-  //   redirectUri: makeRedirectUri(),
-  //   scopes: ['profile', 'email'],
-  // };
-
-  // const discovery: DiscoveryDocument = {
-  //   authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
-  //   tokenEndpoint: 'https://oauth2.googleapis.com/token',
-  //   revocationEndpoint: 'https://oauth2.googleapis.com/revoke',
-  //   userInfoEndpoint: 'https://openidconnect.googleapis.com/v1/userinfo',
-  // };
-
-  // const [request, response, promptAsync] = useAuthRequest(config, discovery);
-
-  // const handleToken = () => {
-  //   if (response?.type === 'success') {
-  //     const token = response.authentication?.accessToken;
-  //     console.log('Access Token:', token);
-  //   } else {
-  //     console.error('Authentication failed or no token available');
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   handleToken();
-  // }, [response]);
 
   const handleState = () => {
     setShowPassword(showState => !showState);
@@ -144,6 +107,7 @@ export default function Login({ navigation }: StackProps) {
                   onChangeText={onChange}
                   placeholder="Enter your email address"
                   type="text"
+                  autoCapitalize='none'
                 />
               </Input>
             )}
@@ -162,6 +126,7 @@ export default function Login({ navigation }: StackProps) {
                   onChangeText={onChange}
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
+                  autoCapitalize='none'
                 />
                 <InputSlot className="pr-3" onPress={handleState}>
                   <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />

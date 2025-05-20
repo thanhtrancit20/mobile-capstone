@@ -13,8 +13,16 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     },
     android: {
       ...config.android,
-      package: process.env.EXPO_PUBLIC_IOS_ANDROID_PACKAGE,
+      package: 'com.yourappname', // Đặt tên package của bạn
       versionCode: 1,
+      permissions: [
+        "CAMERA",
+        "CAMERA_ROLL"
+      ],
+      adaptiveIcon: {
+        foregroundImage: "src/assets/images/logo-sm.png",
+        backgroundColor: "#ffffff"
+      },
     },
     updates: {
       url: `https://u.expo.dev/${process.env.EXPO_PUBLIC_PROJECT_ID}`,
@@ -25,6 +33,19 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       ENV: process.env.EXPO_PUBLIC_ENV,
       API_URL: process.env.EXPO_PUBLIC_API_URL,
     },
+    plugins: [
+      "react-native-vision-camera",
+      "expo-asset",
+      "expo-font",
+      "react-native-face-detector-camera",
+      [
+        "react-native-face-detector-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera"
+        }
+      ]
+    ],
+    runtimeVersion: "1.0.0",
   };
   return envConfig;
 };

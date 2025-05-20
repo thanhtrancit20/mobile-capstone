@@ -22,6 +22,9 @@ import Privacy from '@/src/views/Privacy';
 import Terms from '@/src/views/Terms';
 import CheckYourEmail from '@/src/views/ForgotPassword/CheckYourEmail';
 import ResetPassword from '@/src/views/ResetPassword/ResetPassword';
+import FaceRegister from '@/src/views/FaceRegister/FaceRegister';
+import Courses from '@/src/views/Courses/Courses';
+import CourseDetailTabs from '@/src/views/CourseDetails/CourseDetail';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -135,6 +138,7 @@ export function ChatStackNavigator({ navigation }: StackProps) {
     </Stack.Navigator>
   );
 }
+
 export function SettingsStackNavigator({ navigation }: StackProps) {
   return (
     <Stack.Navigator screenOptions={navigationProps}>
@@ -217,6 +221,37 @@ export function LoginStackNavigator({ navigation }: StackProps) {
         name="CheckYourEmail"
         options={{
           headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+export function CourseStackNavigator({ navigation }: StackProps) {
+  return (
+    <Stack.Navigator screenOptions={navigationProps}>
+      <Stack.Screen
+        component={Courses}
+        name="Courses"
+        options={{
+          title: '',
+          headerTitleAlign: 'center',
+          headerTitle: () => <StackHeaderTitle title="Courses" />,
+          headerStyle: {
+            backgroundColor: '#3b82f6',
+          },
+        }}
+      />
+      <Stack.Screen
+        component={CourseDetailTabs}
+        name="CourseDetailTabs"
+        options={{
+          title: '',
+          headerTitleAlign: 'center',
+          headerTitle: () => <StackHeaderTitle title="Courses" />,
+          headerStyle: {
+            backgroundColor: '#3b82f6',
+          },
         }}
       />
     </Stack.Navigator>

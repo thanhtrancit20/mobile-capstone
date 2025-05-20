@@ -4,6 +4,7 @@ import RenderHTML from 'react-native-render-html';
 import { RouteProp } from '@react-navigation/native';
 import { Heading } from '@/components/ui/heading';
 import { useGetPostById } from '@/src/queries/Blogs';
+import { replaceLocalhost } from '@/src/utils/replaceLocalhost';
 
 type NewsDetailRouteProp = RouteProp<StackParamList, "NewsDetailStack">;
 
@@ -17,7 +18,7 @@ export default function NewsDetail({ route }: { route: NewsDetailRouteProp }) {
   return (
     <ScrollView className="bg-white flex-1">
       <Image
-        source={{ uri: `http://10.0.2.2:8085${blog?.thumbnailUrl}` }}
+        source={{ uri: replaceLocalhost(blog?.thumbnailUrl) }}
         className="w-full h-56"
         resizeMode="stretch"
       />

@@ -5,6 +5,8 @@ import TabNavigator from './tab';
 import * as Linking from 'expo-linking';
 import { useEffect } from 'react';
 import ForgotPassword from '../views/ForgotPassword';
+import FaceLogin from '../views/FaceRegister/FaceLogin';
+import FaceRegister from '../views/FaceRegister/FaceRegister';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 const prefix = Linking.createURL('/');
@@ -60,6 +62,12 @@ function Navigator() {
             headerShown: false,
           }}
         />
+        <Stack.Screen name="FaceRegister" component={FaceRegister} options={{
+          headerShown: false
+        }} />
+        <Stack.Screen name="FaceLogin" component={FaceLogin} options={{
+          headerShown: false
+        }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

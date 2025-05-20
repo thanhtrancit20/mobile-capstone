@@ -10,9 +10,9 @@ export const ScheduleComponent = () => {
     const nextClass = scheduleData[0];
 
     return (
-        <TouchableOpacity className="bg-white w-full rounded-2xl p-4 flex-row items-center shadow-md mt-4">
+        <TouchableOpacity className="bg-white w-full rounded-2xl p-4 flex-row items-center shadow-md">
             <Image
-                source={{ uri: 'https://png.pngtree.com/png-vector/20221013/ourmid/pngtree-calendar-icon-logo-2023-date-time-png-image_6310337.png' }}
+                source={{ uri: 'https://cdn-icons-png.flaticon.com/512/9926/9926396.png' }}
                 className="w-12 h-12 mr-3"
                 resizeMode="contain"
             />
