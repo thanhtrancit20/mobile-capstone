@@ -1,6 +1,6 @@
 import { useHttpPrivateRequest } from '@/src/services/httpRequest/useHttpPrivateRequest';
-import { API_URLS, GetPropertiesParams } from '..';
-import { DeleteTimeSlotRequest, TeacherCheckAttendance } from './types';
+import { API_URLS } from '..';
+import { DeleteTimeSlotRequest, StudentCheckAttendancePayload, TeacherCheckAttendance } from './types';
 
 const useApis = (baseURL = API_URLS.COURSE) => {
   const privateApi = useHttpPrivateRequest(baseURL);
@@ -21,14 +21,20 @@ const useApis = (baseURL = API_URLS.COURSE) => {
       data: request,
     });
   };
+  const studentCheckAttendance = (payload: StudentCheckAttendancePayload) => {
+    return privateApi.post(`/api/v1/attendances/student`, payload);
+  }
 
   return {
+    studentCheckAttendance,
     getAttendanceListByClassSessionId,
     teacherCheckAttendance,
     getAllClassSessions,
     getTimeSlotsByTeacherIdAndSemesterId,
     deleteTimeSlotByTeacherIdAndTimeSlotId,
   };
+
+
 };
 
 export default useApis;

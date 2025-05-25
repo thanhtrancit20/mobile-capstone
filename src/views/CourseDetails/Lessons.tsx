@@ -47,7 +47,7 @@ const Lessons = ({ courseId }: Prop) => {
                         {item.files.length > 0 && (
                             <VStack className="space-y-1 mt-3">
                                 <Divider />
-                                <Text className="italic text-base text-gray-600 mt-1">Tài liệu đính kèm:</Text>
+                                <Text className="italic text-base text-gray-600 mt-1">Attached documents:</Text>
                                 {item.files.map((file, idx) => (
                                     <Pressable key={idx} onPress={() => handleOpenFile(`http://192.168.2.11:8085${file.filePath}`)}>
                                         <HStack className="items-center space-x-1">

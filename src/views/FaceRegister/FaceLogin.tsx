@@ -1,3 +1,4 @@
+import { toast } from '@backpackapp-io/react-native-toast';
 import { CameraView, CameraType, useCameraPermissions, Camera } from 'expo-camera';
 import { useState, useRef } from 'react';
 import { Alert, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -5,19 +6,26 @@ import axios from 'axios';
 import { useAuthStore } from '@/src/zustand/auth/useAuthStore';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackParamList } from '@/src/navigator';
+import useCheckAttendanceForStudent from '@/src/queries/Attendance/useCheckAttendanceForStudent';
 
 type FaceProps = NativeStackScreenProps<StackParamList, 'FaceLogin'>;
 
 export default function FaceLogin({ route, navigation }: FaceProps) {
+    const { onCheckAttendance, isSuccess, isLoading, isError } = useCheckAttendanceForStudent({
+        onSuccess: () => {
+            navigation.goBack();
+            toast.success("Attendance Checked!");
+        }
+    });
+
     const { classSession } = route.params;
-    console.log(classSession);
     const [permission, requestPermission] = useCameraPermissions();
     const [isUploading, setIsUploading] = useState(false);
     const cameraRef = useRef<CameraView | null>(null);
     const { user } = useAuthStore();
     const studentId = user.studentId;
     const id = user.id;
-    console.log(studentId);
+
     if (!permission) {
         // Camera permissions are still loading.
         return <View />;
@@ -67,9 +75,15 @@ export default function FaceLogin({ route, navigation }: FaceProps) {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            //right here => if true call qua usehook
-            Alert.alert('Login Successful', `Welcome Student ID: ${result.data}`);
-            console.log('Login successful', result.data);
+            if (result.data.success) {
+                onCheckAttendance({
+                    studentId: id,
+                    classSessionId: classSession
+                })
+            }
+            else {
+                toast.error(result.data.error);
+            }
         } catch (error: any) {
             console.error('Error logging in with face:', error);
             const errorMessage = error.response?.data?.error || 'Unknown error';

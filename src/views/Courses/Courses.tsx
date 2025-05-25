@@ -21,7 +21,6 @@ export default function Courses({ navigation }: StackProps) {
             }));
         }
     }, [semester, setTableParams]);
-
     const onRefresh = async () => {
         setRefreshing(true);
         await onGetApprovedCoursesForStudentByStudentId();
@@ -60,11 +59,11 @@ export default function Courses({ navigation }: StackProps) {
                         }}
                         className="bg-white p-3 rounded-2xl shadow mb-4 flex-row items-center space-x-4"
                     >
-                        {/* <Image
+                        <Image
                             source={{ uri: replaceLocalhost(item.thumbnail) }}
-                            className="w-16 h-16 rounded-xl mr-3"
+                            className="w-32 h-20 rounded-xl mr-3"
                             resizeMode="cover"
-                        /> */}
+                        />
                         <View className="flex-1">
                             <Text className="text-lg font-semibold">{item.courseCode}</Text>
                             <Text className="text-sm text-gray-600">{item.courseName}</Text>

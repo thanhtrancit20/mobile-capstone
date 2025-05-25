@@ -32,7 +32,7 @@ export default function Login({ navigation }: StackProps) {
   };
 
   const onForgotPassword = () => {
-    navigation.navigate('ForgotPasswordStack', { from: 'Login' });
+    navigation.navigate('ForgotPasswordStack');
   };
 
   const onPrivacy = () => {

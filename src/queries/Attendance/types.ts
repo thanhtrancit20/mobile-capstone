@@ -5,6 +5,12 @@ export type TeacherCheckAttendance = {
   attendanceResponses: AttendanceResponse[];
 };
 
+export type StudentCheckAttendancePayload = {
+  studentId: number;
+  classSessionId: number;
+  notes?: string;
+};
+
 export type StudentAttendanceRecord = {
   studentId: number;
   status: string;
