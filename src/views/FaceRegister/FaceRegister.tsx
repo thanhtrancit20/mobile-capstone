@@ -61,7 +61,7 @@ export default function FaceRegister({ navigation }: StackProps) {
         formData.append('student_id', studentId);
 
         try {
-            const serverUrl = 'http://192.168.2.10:5000/register-face';
+            const serverUrl = 'http://192.168.2.11:5000/register-face';
             const result = await axios.post(serverUrl, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });

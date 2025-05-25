@@ -3,14 +3,21 @@ import { useState, useRef } from 'react';
 import { Alert, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import axios from 'axios';
 import { useAuthStore } from '@/src/zustand/auth/useAuthStore';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { StackParamList } from '@/src/navigator';
 
-export default function FaceLogin() {
+type FaceProps = NativeStackScreenProps<StackParamList, 'FaceLogin'>;
+
+export default function FaceLogin({ route, navigation }: FaceProps) {
+    const { classSession } = route.params;
+    console.log(classSession);
     const [permission, requestPermission] = useCameraPermissions();
     const [isUploading, setIsUploading] = useState(false);
     const cameraRef = useRef<CameraView | null>(null);
     const { user } = useAuthStore();
     const studentId = user.studentId;
-    const username = user.username;
+    const id = user.id;
+    console.log(studentId);
     if (!permission) {
         // Camera permissions are still loading.
         return <View />;
@@ -54,13 +61,14 @@ export default function FaceLogin() {
 
         formData.append('student_id', studentId);
         try {
-            const serverUrl = 'http://192.168.2.10:5000/login-face';
+            const serverUrl = 'http://192.168.2.11:5000/login-face';
             const result = await axios.post(serverUrl, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            Alert.alert('Login Successful', `Welcome Student ID: ${result.data.student_id}`);
+            //right here => if true call qua usehook
+            Alert.alert('Login Successful', `Welcome Student ID: ${result.data}`);
             console.log('Login successful', result.data);
         } catch (error: any) {
             console.error('Error logging in with face:', error);

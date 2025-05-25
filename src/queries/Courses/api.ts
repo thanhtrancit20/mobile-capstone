@@ -1,11 +1,15 @@
-import { useHttpPrivateRequest } from '@/services/useHttpPrivateRequest';
 import { API_URLS } from '../keys';
 import { GetPropertiesParams } from '../helpers';
 import { BaseCourseResponse, CourseActionPayload, FileUploadPayload } from './types';
-import { stringify } from '@/utils';
+import { stringify } from '@/src/utils';
+import { useHttpPrivateRequest } from '@/src/services/httpRequest/useHttpPrivateRequest';
 
 const useApi = (basename = API_URLS.COURSE) => {
   const privateApi = useHttpPrivateRequest(basename);
+
+  const getCourseDetail = (courseId: string) => {
+    return privateApi.get(`/api/v1/departments/courses/${courseId}`);
+  };
 
   const getAllCourses = (params: GetPropertiesParams) => {
     return privateApi.get(`/api/v1/departments/courses?${stringify(params)}`);
@@ -97,6 +101,7 @@ const useApi = (basename = API_URLS.COURSE) => {
     uploadImageInCourse,
     uploadMultiFileInCourse,
     createBaseCourses,
+    getCourseDetail
   };
 };
 

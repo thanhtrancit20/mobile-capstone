@@ -91,7 +91,7 @@ export interface RegistrationResponse {
   semesterId: string;
   registrationDate: Date;
   cancellationDeadline: Date;
-  courseDetails?: CourseResponse;
+  courseDetails: CourseResponse;
   baseCourseDetails?: BaseCourseResponse;
   thumbnail: string;
 }

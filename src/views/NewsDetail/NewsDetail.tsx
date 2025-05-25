@@ -8,7 +8,6 @@ import { replaceLocalhost } from '@/src/utils/replaceLocalhost';
 
 type NewsDetailRouteProp = RouteProp<StackParamList, "NewsDetailStack">;
 
-
 export default function NewsDetail({ route }: { route: NewsDetailRouteProp }) {
   const { newsId } = route.params;
   const { blog } = useGetPostById({ id: newsId });

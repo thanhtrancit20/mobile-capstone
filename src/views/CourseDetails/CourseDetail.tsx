@@ -1,66 +1,79 @@
-import { useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, ScrollView, useWindowDimensions } from "react-native";
+import { RouteProp } from '@react-navigation/native';
+import { StackParamList } from "@/src/navigator";
+import { useGetCourseDetail } from "@/src/queries/Courses/useGetCourseDetail";
+import CourseInformation from "./CourseInformation";
+import AssessmentPlan from "./AssessmentPlan";
+import LearningMaterials from "./LearningMaterials";
+import Lessons from "./Lessons";
+import Attendance from "./Attendance";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-const tabs = ["Course", "Lessons", "Attendance"];
+const tabs = ["Course", "Lessons", "Attendance", "Assessment Plan", "Learning Materials"];
 
-const courseDetail = {
-    courseName: "Lập trình Web",
-    courseCode: "WEB101",
-    description: "Giới thiệu HTML, CSS, JS và React.",
-    lessons: [
-        { title: "Buổi 1: HTML cơ bản" },
-        { title: "Buổi 2: CSS Flexbox" },
-        { title: "Buổi 3: JavaScript cơ bản" },
-    ],
-};
+type CourseDetailTabsProps = NativeStackScreenProps<StackParamList, 'CourseDetailTabs'>;
 
-export default function CourseDetailManualTabs() {
+export default function CourseDetailManualTabs({ route, navigation }: CourseDetailTabsProps) {
     const [activeTab, setActiveTab] = useState("Course");
+    const { courseId } = route.params;
+    const { courseDetail, error, handleInvalidateTeachersList, isFetching, onGetTeachersInCourse } = useGetCourseDetail({ courseId });
 
     const renderTabContent = () => {
         switch (activeTab) {
             case "Course":
                 return (
-                    <View className="p-4">
-                        <Text className="text-xl font-bold">{courseDetail.courseName}</Text>
-                        <Text className="text-sm text-gray-500 mb-2">Mã môn: {courseDetail.courseCode}</Text>
-                        <Text className="text-gray-700">{courseDetail.description}</Text>
-                    </View>
+                    <CourseInformation isFetching={isFetching} courseInformation={courseDetail?.courseInformation} />
+                );
+            case "Assessment Plan":
+                return (
+                    <AssessmentPlan isFetching={isFetching} assessmentPlan={courseDetail?.assessmentPlan} />
+                );
+            case "Learning Materials":
+                return (
+                    <LearningMaterials isFetching={isFetching} learningMaterials={courseDetail?.learningMaterialsAndOutcomes} />
                 );
             case "Lessons":
                 return (
-                    <ScrollView className="p-4">
-                        {courseDetail.lessons.map((lesson, index) => (
-                            <Text key={index} className="mb-2">• {lesson.title}</Text>
-                        ))}
-                    </ScrollView>
+                    <Lessons courseId={courseId} />
                 );
             case "Attendance":
                 return (
-                    <View className="p-4">
-                        <Text>Thông tin điểm danh sẽ hiển thị ở đây.</Text>
-                    </View>
+                    <Attendance courseId={Number(courseId)} navigation={navigation} />
                 );
             default:
-                return null;
+                return (
+                    <View className="p-4">
+                        <Text>Không có nội dung cho tab này.</Text>
+                    </View>
+                );
         }
     };
 
     return (
         <View className="flex-1 bg-white">
             {/* Tabs */}
-            <View className="flex-row border-b border-gray-200">
-                {tabs.map((tab) => (
-                    <TouchableOpacity
-                        key={tab}
-                        className={`flex-1 p-3 items-center ${activeTab === tab ? "border-b-2 border-indigo-500" : ""}`}
-                        onPress={() => setActiveTab(tab)}
-                    >
-                        <Text className={`${activeTab === tab ? "text-indigo-600 font-semibold" : "text-gray-600"}`}>
-                            {tab}
-                        </Text>
-                    </TouchableOpacity>
-                ))}
+            <View className="border-b border-gray-200 bg-white">
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{ paddingHorizontal: 8, alignItems: 'center', height: 48 }}
+                >
+                    {tabs.map((tab) => {
+                        const isActive = activeTab === tab;
+                        return (
+                            <TouchableOpacity
+                                key={tab}
+                                onPress={() => setActiveTab(tab)}
+                                className={`px-4 h-full justify-center border-b-2 ${isActive ? "border-indigo-500" : "border-transparent"}`}
+                            >
+                                <Text className={`${isActive ? "text-indigo-600 font-semibold" : "text-gray-600"}`}>
+                                    {tab}
+                                </Text>
+                            </TouchableOpacity>
+                        );
+                    })}
+                </ScrollView>
             </View>
 
             {/* Tab Content */}

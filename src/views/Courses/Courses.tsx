@@ -13,7 +13,6 @@ export default function Courses({ navigation }: StackProps) {
     const [refreshing, setRefreshing] = useState(false);
     const { approvedCourses, isFetching, error, setTableParams, onGetApprovedCoursesForStudentByStudentId } =
         useGetApprovedCoursesForStudentByStudentId({ id: (user.id).toString() });
-
     useEffect(() => {
         if (semester?.id) {
             setTableParams((prevParams) => ({
@@ -57,15 +56,15 @@ export default function Courses({ navigation }: StackProps) {
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('CourseDetailTabs', { courseId: item.id });
+                            navigation.navigate('CourseDetailTabs', { courseId: item.courseDetails.id });
                         }}
                         className="bg-white p-3 rounded-2xl shadow mb-4 flex-row items-center space-x-4"
                     >
-                        <Image
+                        {/* <Image
                             source={{ uri: replaceLocalhost(item.thumbnail) }}
                             className="w-16 h-16 rounded-xl mr-3"
                             resizeMode="cover"
-                        />
+                        /> */}
                         <View className="flex-1">
                             <Text className="text-lg font-semibold">{item.courseCode}</Text>
                             <Text className="text-sm text-gray-600">{item.courseName}</Text>

@@ -26,9 +26,9 @@ export type StackParamList = {
   ResetPassword: undefined;
   CheckYourEmail: { username: string };
   FaceRegister: undefined;
-  FaceLogin: undefined;
   Courses: undefined;
   CourseDetailTabs: { courseId: string };
+  FaceLogin: { classSession: number };
 };
 
 export type StackProps = NativeStackScreenProps<StackParamList, keyof StackParamList>;
