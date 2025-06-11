@@ -29,7 +29,7 @@ export const useConversationListContainer = () => {
   useChatWebSocket({
     userId: user?.id?.toString(),
     token: String(accessTokenState),
-    serverUrl: "http://192.168.2.11:8086/chat-svc/ws",
+    serverUrl: "http://10.0.2.2:8086/chat-svc/ws",
     subscriptionChannels: [`/user/${user?.id}/queue/messages`, "/user/public"],
     onMessage: (message) => {
       if (message.source === "/user/public") {

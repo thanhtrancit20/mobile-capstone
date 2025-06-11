@@ -25,7 +25,7 @@ export const useMessageListContainer = () => {
   const { sendMessage } = useChatWebSocket({
     userId: senderId,
     token: String(accessTokenState),
-    serverUrl: "http://192.168.2.11:8086/chat-svc/ws",
+    serverUrl: "http://10.0.2.2:8086/chat-svc/ws",
     subscriptionChannels: [`/user/${senderId}/queue/messages`, "/user/public"],
     onMessage: (message) => {
       console.log("📩 Received WebSocket message:", message);

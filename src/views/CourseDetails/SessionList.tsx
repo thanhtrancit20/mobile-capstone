@@ -1,7 +1,7 @@
 import { SessionResponse } from "@/src/queries/Attendance/types";
 import useGetAllClassSessionsByCourseId from "@/src/queries/Attendance/useGetAllClassSessionsByCourseId";
 import React from "react";
-import { View, Text, FlatList, Button, StyleSheet } from "react-native";
+import { View, Text, FlatList, Button, StyleSheet, RefreshControl } from "react-native";
 
 type Props = {
     courseId: number;
@@ -13,28 +13,62 @@ export default function ClassSessionList({ courseId, onAttendanceClick }: Props)
         data: allSessionsResponse,
         error,
         isFetching,
+        onGetAllClassSessionsByCourseId
     } = useGetAllClassSessionsByCourseId({
         courseId,
         enabled: !!courseId,
     });
 
+    const onRefresh = () => {
+        if (courseId) {
+            onGetAllClassSessionsByCourseId();
+        }
+    };
     if (isFetching) return <Text>Loading sessions...</Text>;
     if (error) return <Text>Error loading sessions: {error.message}</Text>;
 
     const sessions: SessionResponse[] = allSessionsResponse?.result || [];
 
     const renderItem = ({ item }: { item: SessionResponse }) => {
-        const sessionDate = new Date(item.sessionDate).toLocaleDateString();
+        const sessionDateObj = new Date(item.sessionDate);
         const startTime = item.timeSlot?.startTime || "";
         const endTime = item.timeSlot?.endTime || "";
 
+        const startDateTime = new Date(sessionDateObj);
+        if (startTime) {
+            const [startHour, startMinute, startSecond] = startTime.split(":").map(Number);
+            startDateTime.setHours(startHour, startMinute, startSecond || 0);
+        }
+
+        const endDateTime = new Date(sessionDateObj);
+        if (endTime) {
+            const [endHour, endMinute, endSecond] = endTime.split(":").map(Number);
+            endDateTime.setHours(endHour, endMinute, endSecond || 0);
+        }
+
+        const now = new Date();
+
+        const isAttendanceAllowed = now >= startDateTime && now <= endDateTime;
+
+        const localDateStr = sessionDateObj.toLocaleDateString();
+        const localStartTime = startDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const localEndTime = endDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
         return (
             <View style={styles.sessionItem}>
-                <Text style={styles.sessionText}>Date: {sessionDate}</Text>
+                <Text style={styles.sessionText}>Date: {localDateStr}</Text>
                 <Text style={styles.sessionText}>
-                    Time: {startTime} - {endTime}
+                    Time: {localStartTime} - {localEndTime}
                 </Text>
-                <Button title="Take Attendance" onPress={() => onAttendanceClick(item.id)} />
+                <Button
+                    title={isAttendanceAllowed ? "Take Attendance" : "Not Available"}
+                    onPress={() => {
+                        if (isAttendanceAllowed) {
+                            onAttendanceClick(item.id);
+                        }
+                    }}
+                    color={isAttendanceAllowed ? undefined : "gray"}
+                />
             </View>
         );
     };
@@ -50,6 +84,13 @@ export default function ClassSessionList({ courseId, onAttendanceClick }: Props)
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={renderItem}
                     contentContainerStyle={{ paddingBottom: 20 }}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={isFetching}
+                            onRefresh={onRefresh}
+                            colors={['#007AFF']} // Optional: spinner color
+                        />
+                    }
                 />
             )}
         </View>

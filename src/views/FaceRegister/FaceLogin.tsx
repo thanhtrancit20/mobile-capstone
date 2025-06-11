@@ -7,8 +7,15 @@ import { useAuthStore } from '@/src/zustand/auth/useAuthStore';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackParamList } from '@/src/navigator';
 import useCheckAttendanceForStudent from '@/src/queries/Attendance/useCheckAttendanceForStudent';
+import * as Location from 'expo-location';
+import haversine from 'haversine-distance';
 
 type FaceProps = NativeStackScreenProps<StackParamList, 'FaceLogin'>;
+
+const universityLocation = {
+    latitude: 11.0528,
+    longitude: 106.6661,
+};
 
 export default function FaceLogin({ route, navigation }: FaceProps) {
     const { onCheckAttendance, isSuccess, isLoading, isError } = useCheckAttendanceForStudent({
@@ -44,11 +51,30 @@ export default function FaceLogin({ route, navigation }: FaceProps) {
     const takePictureAndUpload = async () => {
         if (cameraRef.current) {
             try {
+                const { status } = await Location.requestForegroundPermissionsAsync();
+                if (status !== 'granted') {
+                    Alert.alert('Permission denied', 'Location permission is required');
+                    return;
+                }
+
+                const location = await Location.getCurrentPositionAsync({});
+                const userLocation = {
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                };
+
+                const distance = haversine(userLocation, universityLocation);
+
+                if (distance > 200) {
+                    Alert.alert('Too far', 'Must be within 200m of the university');
+                    return;
+                }
+
                 const photo = await cameraRef.current.takePictureAsync({ base64: false });
                 setIsUploading(true);
                 await uploadImage(photo.uri);
             } catch (error) {
-                Alert.alert('Error', 'Could not capture or upload image');
+                Alert.alert('Lỗi', 'Không thể chụp hoặc upload hình');
                 console.error(error);
             } finally {
                 setIsUploading(false);
@@ -69,7 +95,7 @@ export default function FaceLogin({ route, navigation }: FaceProps) {
 
         formData.append('student_id', studentId);
         try {
-            const serverUrl = 'http://192.168.2.11:5000/login-face';
+            const serverUrl = 'http://10.0.2.2:5000/login-face';
             const result = await axios.post(serverUrl, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
