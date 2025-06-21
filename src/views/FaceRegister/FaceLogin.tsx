@@ -57,18 +57,18 @@ export default function FaceLogin({ route, navigation }: FaceProps) {
                     return;
                 }
 
-                const location = await Location.getCurrentPositionAsync({});
-                const userLocation = {
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude,
-                };
+                // const location = await Location.getCurrentPositionAsync({});
+                // const userLocation = {
+                //     latitude: location.coords.latitude,
+                //     longitude: location.coords.longitude,
+                // };
 
-                const distance = haversine(userLocation, universityLocation);
+                // const distance = haversine(userLocation, universityLocation);
 
-                if (distance > 200) {
-                    Alert.alert('Too far', 'Must be within 200m of the university');
-                    return;
-                }
+                // if (distance > 200) {
+                //     Alert.alert('Too far', 'Must be within 200m of the university');
+                //     return;
+                // }
 
                 const photo = await cameraRef.current.takePictureAsync({ base64: false });
                 setIsUploading(true);
@@ -95,7 +95,7 @@ export default function FaceLogin({ route, navigation }: FaceProps) {
 
         formData.append('student_id', studentId);
         try {
-            const serverUrl = 'http://10.0.2.2:5000/login-face';
+            const serverUrl = 'http://192.168.2.4:5000/login-face';
             const result = await axios.post(serverUrl, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -116,6 +116,7 @@ export default function FaceLogin({ route, navigation }: FaceProps) {
             Alert.alert('Login Failed', errorMessage);
         }
     };
+
 
     return (
         <View style={styles.container}>

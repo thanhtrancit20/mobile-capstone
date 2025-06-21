@@ -49,7 +49,7 @@ const Lessons = ({ courseId }: Prop) => {
                                 <Divider />
                                 <Text className="italic text-base text-gray-600 mt-1">Attached documents:</Text>
                                 {item.files.map((file, idx) => (
-                                    <Pressable key={idx} onPress={() => handleOpenFile(`http://10.0.2.2:8085${file.filePath}`)}>
+                                    <Pressable key={idx} onPress={() => handleOpenFile(`http://192.168.2.4:8085${file.filePath}`)}>
                                         <HStack className="items-center space-x-1">
                                             <Icon as={MaterialIcons} size="sm" color="$blue600" />
                                             <Text className="underline text-base text-blue-700">
